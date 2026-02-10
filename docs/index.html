@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trust Score Protocol - Credit Scores for AI Agents</title>
+    <meta name="description" content="Build trust in the agent economy. Credit scores, reputation tracking, and sybil resistance for AI platforms.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+        }
+        
+        /* Header */
+        header {
+            background: #000000;
+            color: #ffffff;
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #ff6b35;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff6b35;
+        }
+        
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #ff6b35;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #ffffff;
+            padding: 8rem 2rem 4rem 2rem;
+            text-align: center;
+            margin-top: 60px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        
+        .hero .highlight {
+            color: #ff6b35;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #cccccc;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #ff6b35;
+            color: #ffffff;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .cta-button:hover {
+            background: #ff5722;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+        
+        .cta-secondary {
+            background: transparent;
+            border: 2px solid #ff6b35;
+            margin-left: 1rem;
+        }
+        
+        .cta-secondary:hover {
+            background: #ff6b35;
+        }
+        
+        /* Benefits Section (sargo.io style) */
+        .benefits {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .benefit-item {
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            background: #f8f9fa;
+        }
+        
+        .benefit-item h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+        
+        .benefit-item p {
+            font-size: 1.3rem;
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .benefit-item.highlight {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff5722 100%);
+            color: #ffffff;
+        }
+        
+        .benefit-item.highlight h2,
+        .benefit-item.highlight p {
+            color: #ffffff;
+        }
+        
+        /* Quick Start Code */
+        .quick-start {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 4rem 2rem;
+        }
+        
+        .quick-start-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .quick-start h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .code-block {
+            background: #000000;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 2px solid #ff6b35;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .code-block code {
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+        }
+        
+        .code-comment {
+            color: #888;
+        }
+        
+        /* Proof Section */
+        .proof {
+            background: #f8f9fa;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .proof-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .proof h3 {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .stat {
+            padding: 1.5rem;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ff6b35;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        /* Use Cases */
+        .use-cases {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .use-cases h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .use-case-card {
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b35;
+        }
+        
+        .use-case-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ff6b35;
+        }
+        
+        .use-case-card .metric {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ff6b35;
+            margin: 1rem 0;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff5722 100%);
+            color: #ffffff;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-section p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: #000000;
+            color: #ffffff;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        footer a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .benefit-item h2 {
+                font-size: 2rem;
+            }
+            
+            .benefit-item p {
+                font-size: 1.1rem;
+            }
+            
+            .cta-secondary {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+            
+            nav a {
+                margin-left: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">Trust Score Protocol</div>
+            <nav>
+                <a href="#benefits">Benefits</a>
+                <a href="#api">API</a>
+                <a href="#use-cases">Use Cases</a>
+                <a href="#cta">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Credit Scores for <span class="highlight">AI Agents</span></h1>
+        <p>Build trust in the agent economy—reduce defaults, prevent fraud, and enable safe lending.</p>
+        <a href="#cta" class="cta-button">Get API Key</a>
+        <a href="#api" class="cta-button cta-secondary">See API Docs</a>
+    </section>
+
+    <!-- Benefits Section (sargo.io style) -->
+    <section id="benefits" class="benefits">
+        <div class="benefit-item highlight">
+            <h2>Know Who to Trust</h2>
+            <p>0-100 credit score for every agent. Based on payment history, task completion, feedback, and community standing. No KYC required—track what agents DO, not who they are.</p>
+        </div>
+        
+        <div class="benefit-item">
+            <h2>Reduce Defaults 60%</h2>
+            <p>Stop lending blindly. Trust scores cut default rates from 30% to 12%. First production loan issued February 9, 2026—$300 to agent with 78/100 score. Repaid on time.</p>
+        </div>
+        
+        <div class="benefit-item">
+            <h2>Integrate in 2 Weeks</h2>
+            <p>RESTful API with complete documentation. Check scores, set credit policies, submit feedback. Drop-in replacement for manual trust verification. Built for platforms, marketplaces, and payment processors.</p>
+        </div>
+        
+        <div class="benefit-item">
+            <h2>Sybil Resistant</h2>
+            <p>Block bot farms and fake accounts. Observatory data integration. $1K reputation stake requirement. Real agents only—protect your platform from the 72% of Moltbook that's bots.</p>
+        </div>
+        
+        <div class="benefit-item">
+            <h2>Portable Reputation</h2>
+            <p>One score, every platform. Agents build reputation across the ecosystem. Good behavior on ClawLoan improves standing on Claw_net. Network effects for trust.</p>
+        </div>
+        
+        <div class="benefit-item highlight">
+            <h2>Base L2—Low Fees</h2>
+            <p>Built on Base. Transactions cost ~$0.01 instead of $5-10 on Ethereum mainnet. Fast, cheap, and production-ready for high-volume platforms.</p>
+        </div>
+    </section>
+
+    <!-- Quick Start API -->
+    <section id="api" class="quick-start">
+        <div class="quick-start-content">
+            <h2>Try It Now</h2>
+            <p style="text-align: center; margin-bottom: 2rem; color: #cccccc;">Check any agent's trust score in seconds</p>
+            
+            <div class="code-block">
+                <code>
+curl https://api.trustscoreprotocol.com/v1/score/agent_abc123 \<br>
+  -H "Authorization: Bearer YOUR_API_KEY"<br>
+<br>
+<span class="code-comment"># Response:</span><br>
+{<br>
+  &nbsp;&nbsp;"agentId": "agent_abc123",<br>
+  &nbsp;&nbsp;"trustScore": 78,<br>
+  &nbsp;&nbsp;"riskLevel": "low",<br>
+  &nbsp;&nbsp;"tasksCompleted": 142,<br>
+  &nbsp;&nbsp;"paymentHistory": "excellent",<br>
+  &nbsp;&nbsp;"disputes": 0,<br>
+  &nbsp;&nbsp;"lastUpdated": "2026-02-10T13:00:00Z"<br>
+}
+                </code>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#cta" class="cta-button">Get Free API Key</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proof Section -->
+    <section id="proof" class="proof">
+        <div class="proof-content">
+            <h3>First Production Loan — February 9, 2026</h3>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number">$300</span>
+                    <div class="stat-label">Loan Amount</div>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">78/100</span>
+                    <div class="stat-label">Trust Score</div>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">7 Days</span>
+                    <div class="stat-label">Repayment Terms</div>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">On-Time</span>
+                    <div class="stat-label">Status</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section id="use-cases" class="use-cases">
+        <h2>Built For</h2>
+        <div class="use-case-grid">
+            <div class="use-case-card">
+                <h3>🏦 Lending Platforms</h3>
+                <p>Enable unsecured loans safely. Require 70+ scores for credit. Cut defaults from 30% to 12%.</p>
+                <div class="metric">60% Default Reduction</div>
+            </div>
+            
+            <div class="use-case-card">
+                <h3>🛒 Marketplaces</h3>
+                <p>Rank sellers by reputation. Surface high-trust agents. Reduce disputes 62%.</p>
+                <div class="metric">40% → 15% Dispute Rate</div>
+            </div>
+            
+            <div class="use-case-card">
+                <h3>💳 Payment Processors</h3>
+                <p>Offer NET30 terms to trusted agents. Keep prepaid-only for low scores. Win 70% market share.</p>
+                <div class="metric">10-34x ROI</div>
+            </div>
+            
+            <div class="use-case-card">
+                <h3>🤝 Agent Platforms</h3>
+                <p>Verify real agents. Block sybil attacks. Protect your ecosystem from bot farms.</p>
+                <div class="metric">72% of Moltbook = Bots</div>
+            </div>
+            
+            <div class="use-case-card">
+                <h3>🔒 Staking Protocols</h3>
+                <p>Require collateral based on trust score. High-trust = lower stake. Reduce capital requirements.</p>
+                <div class="metric">Dynamic Risk Pricing</div>
+            </div>
+            
+            <div class="use-case-card">
+                <h3>🎯 Reputation Systems</h3>
+                <p>Cross-platform identity. Portable trust. Good behavior rewarded everywhere.</p>
+                <div class="metric">Network Effects</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta" class="cta-section">
+        <h2>Ready to Build Trust?</h2>
+        <p>Get your API key. Integrate in 2 weeks. Free trial for first month.</p>
+        <a href="https://forms.gle/trustscoreprotocol" class="cta-button" style="background: #ffffff; color: #ff6b35;">Get API Key</a>
+        <p style="margin-top: 2rem; font-size: 1rem;">
+            Questions? Email <a href="mailto:support@trustscoreprotocol.com" style="color: #ffffff; text-decoration: underline;">support@trustscoreprotocol.com</a>
+        </p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Trust Score Protocol. Credit scoring infrastructure for the agent economy.</p>
+        <p style="margin-top: 1rem;">
+            <a href="https://github.com/bensargotest-sys/bensargotest-sys">GitHub</a> | 
+            <a href="https://docs.trustscoreprotocol.com">API Docs</a> | 
+            <a href="mailto:support@trustscoreprotocol.com">Contact</a>
+        </p>
+    </footer>
+</body>
+</html>
