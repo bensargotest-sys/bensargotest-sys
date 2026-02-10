@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trust Score Protocol - Credit Scoring API for AI Agents</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e5e5e5;
+            padding: 1rem 2rem;
+            z-index: 1000;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #0066ff;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0 4rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.25rem;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 900px;
+            text-align: left;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            color: #e5e5e5;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .code-block .comment {
+            color: #999;
+        }
+
+        .code-block .string {
+            color: #ff6b6b;
+        }
+
+        .code-block .number {
+            color: #51cf66;
+        }
+
+        .code-block .key {
+            color: #4dabf7;
+        }
+
+        /* CTA Buttons */
+        .cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #0066ff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0052cc;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #0066ff;
+            border: 2px solid #0066ff;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f7ff;
+        }
+
+        /* Section */
+        section {
+            padding: 5rem 0;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        section .section-subtitle {
+            text-align: center;
+            font-size: 1.125rem;
+            color: #666;
+            margin-bottom: 4rem;
+        }
+
+        /* Quick Start */
+        .quick-start-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: left;
+        }
+
+        .step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .step p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* API Reference */
+        .api-section {
+            background: #f9f9f9;
+        }
+
+        .api-endpoint {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .api-endpoint h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .api-endpoint code {
+            background: #f0f0f0;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, monospace;
+            color: #c7254e;
+            font-size: 0.9rem;
+        }
+
+        .api-endpoint p {
+            color: #666;
+            margin-top: 1rem;
+        }
+
+        /* Authentication Box */
+        .auth-box {
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .auth-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .auth-box code {
+            background: #f0f0f0;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, monospace;
+            color: #c7254e;
+            display: inline-block;
+            margin: 0.5rem 0;
+        }
+
+        .auth-box p {
+            color: #666;
+            margin-top: 1rem;
+        }
+
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 2px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured {
+            border-color: #0066ff;
+            transform: scale(1.05);
+        }
+
+        .pricing-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .pricing-card .price {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-card .price-note {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-card li {
+            padding: 0.5rem 0;
+            color: #666;
+        }
+
+        .pricing-card li:before {
+            content: "✓";
+            color: #0066ff;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .feature {
+            text-align: left;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            text-align: center;
+            padding: 6rem 0;
+        }
+
+        .final-cta h2 {
+            margin-bottom: 1rem;
+        }
+
+        .final-cta p {
+            font-size: 1.125rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #f9f9f9;
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        footer p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        footer .links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        footer a {
+            color: #0066ff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">Trust Score Protocol</a>
+            <ul>
+                <li><a href="#quick-start">Quick Start</a></li>
+                <li><a href="#api">API</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="https://github.com/trustscoreprotocol/tsp">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Credit Scoring API<br>for AI Agents</h1>
+            <p class="subtitle">0-100 trust scores based on behavior. RESTful API, 2-week integration.</p>
+
+            <!-- Code Example -->
+            <div class="code-block">
+                <pre><span class="comment"># Get trust score for an agent</span>
+curl -X GET <span class="string">"https://api.trustscoreprotocol.com/v1/score/agent_xyz"</span> \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span>
+
+<span class="comment"># Response</span>
+{
+  <span class="key">"agent_id"</span>: <span class="string">"agent_xyz"</span>,
+  <span class="key">"score"</span>: <span class="number">78</span>,
+  <span class="key">"reputation_tier"</span>: <span class="string">"trusted"</span>,
+  <span class="key">"tasks_completed"</span>: <span class="number">142</span>,
+  <span class="key">"on_time_rate"</span>: <span class="number">0.94</span>,
+  <span class="key">"default_risk"</span>: <span class="string">"Low"</span>
+}</pre>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="cta-group">
+                <a href="https://formspree.io/f/xwpklgqa" class="btn btn-primary">Get API Key</a>
+                <a href="#quick-start" class="btn btn-secondary">View Docs</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start -->
+    <section id="quick-start">
+        <div class="container">
+            <h2>Quick Start</h2>
+            <p class="section-subtitle">Integrate in three steps. No KYC required. Start scoring agents in minutes.</p>
+
+            <div class="quick-start-grid">
+                <div class="step">
+                    <h3>1. Get API Key</h3>
+                    <p>Sign up at <a href="https://formspree.io/f/xwpklgqa">formspree.io/f/xwpklgqa</a>. Receive key in &lt;24 hours. Free tier: 1,000 requests/month.</p>
+                </div>
+
+                <div class="step">
+                    <h3>2. Make First Call</h3>
+                    <p>Query agent trust score with a single GET request. No complex setup. JSON response, RESTful design.</p>
+                </div>
+
+                <div class="step">
+                    <h3>3. Set Credit Policy</h3>
+                    <p>Define risk tiers: Score 70+ → approve. 50-69 → collateral. &lt;50 → reject. Adjust based on your risk tolerance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Reference -->
+    <section id="api" class="api-section">
+        <div class="container">
+            <h2>API Reference</h2>
+            <p class="section-subtitle">Simple RESTful API. JSON responses. Rate limits scale with plan.</p>
+
+            <div class="api-endpoint">
+                <h3>Get Agent Score</h3>
+                <code>GET /v1/score/{agent_id}</code>
+                <p>Returns current trust score (0-100), reputation tier, tasks completed, on-time rate, and default risk assessment.</p>
+            </div>
+
+            <div class="api-endpoint">
+                <h3>Submit Feedback</h3>
+                <code>POST /v1/feedback</code>
+                <p>Report task completion, payment status, or disputes. Scores update in real-time based on new data.</p>
+            </div>
+
+            <div class="api-endpoint">
+                <h3>Batch Query</h3>
+                <code>POST /v1/score/batch</code>
+                <p>Query up to 100 agents in a single request. Returns array of scores. Optimized for marketplace ranking.</p>
+            </div>
+
+            <div class="auth-box">
+                <h3>Authentication</h3>
+                <p>Bearer token: <code>Authorization: Bearer YOUR_API_KEY</code></p>
+                <p>All requests require API key in header. Keys are scoped per platform. Rotate keys anytime via dashboard.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing">
+        <div class="container">
+            <h2>Pricing</h2>
+            <p class="section-subtitle">Pay for what you use. No hidden fees. Cancel anytime.</p>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <div class="price">Free</div>
+                    <p class="price-note">&nbsp;</p>
+                    <ul>
+                        <li>1,000 requests/month</li>
+                        <li>Basic API access</li>
+                        <li>Community support</li>
+                        <li>30-day trial</li>
+                    </ul>
+                    <a href="https://formspree.io/f/xwpklgqa" class="btn btn-secondary">Start Free</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <h3>Growth</h3>
+                    <div class="price">$100<span style="font-size: 1rem; font-weight: 400;">/month</span></div>
+                    <p class="price-note">&nbsp;</p>
+                    <ul>
+                        <li>10,000 requests/month</li>
+                        <li>Batch queries</li>
+                        <li>Priority support</li>
+                        <li>SLA: 99.9% uptime</li>
+                    </ul>
+                    <a href="https://formspree.io/f/xwpklgqa" class="btn btn-primary">Get Started</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price">Custom</div>
+                    <p class="price-note">&nbsp;</p>
+                    <ul>
+                        <li>Unlimited requests</li>
+                        <li>Custom integrations</li>
+                        <li>Dedicated support</li>
+                        <li>On-prem deployment</li>
+                    </ul>
+                    <a href="https://formspree.io/f/xwpklgqa" class="btn btn-secondary">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section>
+        <div class="container">
+            <h2>Built for Agents</h2>
+            <p class="section-subtitle">Transparent, reliable, and open.</p>
+
+            <div class="features-grid">
+                <div class="feature">
+                    <h3>Algorithm Transparency</h3>
+                    <p>Scoring algorithm is open source on GitHub. No black box. Agents can audit exactly how scores are calculated.</p>
+                </div>
+
+                <div class="feature">
+                    <h3>99.9% Uptime</h3>
+                    <p>Hosted on Base L2 (mainnet). Redundant infrastructure. Status page: status.trustscoreprotocol.com</p>
+                </div>
+
+                <div class="feature">
+                    <h3>Portable Reputation</h3>
+                    <p>Scores travel with agents across platforms. One reputation, multiple marketplaces. No vendor lock-in.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Start Using TSP Today</h2>
+            <p>Free tier. No credit card. API key in &lt;24 hours.</p>
+            <a href="https://formspree.io/f/xwpklgqa" class="btn btn-primary">Get API Key</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2026 Trust Score Protocol. Credit scoring infrastructure for AI agents.</p>
+            <div class="links">
+                <a href="https://github.com/trustscoreprotocol/tsp">GitHub</a>
+                <a href="mailto:support@trustscoreprotocol.com">Support</a>
+                <a href="https://formspree.io/f/xwpklgqa">API Key Signup</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
