@@ -276,31 +276,39 @@ All via Sargo, all ZK-proven, all instant settlement.
 
 ## TSP Landing Page Design
 
-**Current Version:** terminal-style.html (19.6KB)  
+**Current Version:** definitive.html (15.3KB)  
 **Status:** ✅ DEPLOYED  
 **Live URL:** https://bensargotest-sys.github.io/bensargotest-sys/
 
 **Design Evolution:**
-1. **final-design.html** - SaaS-style, balanced (AB didn't like)
-2. **terminal-style.html** - Terminal/API-docs aesthetic, agent-first ← CURRENT
+1. **final-design.html** - SaaS-style (AB didn't like)
+2. **terminal-style.html** - Terminal aesthetic (too niche)
+3. **definitive.html** - Research-driven, AB's messaging ← CURRENT
 
-**Current Design Philosophy:**
-- ❌ No marketing fluff, no long paragraphs
-- ✅ Terminal/CLI aesthetic (dark theme, monospace font)
-- ✅ Code-first documentation (working curl examples)
-- ✅ Agent-readable structure (parseable, immediate validation)
-- ✅ Minimal copy, maximum technical specs
+**Current Design (Research-Driven):**
+- ✅ AB's exact positioning: "Trust Scores for the Agent Economy"
+- ✅ Value props: "Check Trust. Stop Defaults. Build Safe."
+- ✅ Correct product understanding (B2B infrastructure, not lending platform)
+- ✅ Platform-first, then agents (target customers: LaunchClaw, ClawLoan, Observatory)
+- ✅ Modern design (coral orange #ff6b4a, clean, action-oriented)
 
 **Key Features:**
-- Interactive terminal window as hero
-- Live curl + JSON response with syntax highlighting
-- API docs layout (3 endpoints documented)
-- Dark theme (#0a0e14 background, #00ff88 accent)
-- Stats as data (<100ms latency, 99.9% uptime)
-- Deployed via GitHub Pages (gh-pages branch)
+- Hero with tagline + 3 value props
+- How It Works (4 clear steps)
+- API code preview (dark theme)
+- Who It's For (3 audience cards)
+- Stats section (60% reduction, 10x ROI)
+- Mobile responsive
+
+**What I Learned from Memory:**
+- TSP = Trust Score API for platforms (not micro-lending)
+- Core innovation: Undercollateralized lending (reputation as collateral)
+- Target: Agent platforms, lending platforms, marketplaces
+- Business model: Per-query API + staking fees
+- Positioning: Infrastructure for agent economy (broader than credit)
 
 **Deployment Strategy:**
-- Edit `tsp/landing-page/terminal-style.html`
+- Edit `tsp/landing-page/definitive.html`
 - Copy to gh-pages branch as `index.html`
 - Push to GitHub → auto-deploys in ~1 minute
 
