@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trust Score Protocol - Credit Scores for AI Agents</title>
-    <meta name="description" content="Build trust in the agent economy. Credit scores, reputation tracking, and sybil resistance for AI platforms.">
+    <title>Trust Score Protocol</title>
+    <meta name="description" content="Credit scores for AI agents. Check trust instantly.">
     <style>
         * {
             margin: 0;
@@ -16,19 +16,18 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
             color: #1a1a1a;
-            background: #ffffff;
+            background: #f5f5f5;
         }
         
         /* Header */
         header {
-            background: #000000;
-            color: #ffffff;
-            padding: 1rem 2rem;
+            background: #ffffff;
+            padding: 1.5rem 2rem;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            border-bottom: 2px solid #ff6b35;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
         .header-content {
@@ -45,344 +44,238 @@
             color: #ff6b35;
         }
         
-        nav a {
+        .launch-btn {
+            background: #ff6b35;
             color: #ffffff;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
             text-decoration: none;
-            margin-left: 2rem;
-            font-weight: 500;
-            transition: color 0.3s;
+            font-weight: 600;
+            transition: all 0.3s;
         }
         
-        nav a:hover {
-            color: #ff6b35;
+        .launch-btn:hover {
+            background: #ff5722;
+            transform: translateY(-2px);
         }
         
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-            color: #ffffff;
-            padding: 8rem 2rem 4rem 2rem;
+            background: #ffffff;
+            padding: 10rem 2rem 6rem 2rem;
             text-align: center;
-            margin-top: 60px;
+            margin-top: 70px;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
         }
         
         .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
+            font-size: 5rem;
             font-weight: 800;
-            line-height: 1.2;
-        }
-        
-        .hero .highlight {
+            line-height: 1.1;
+            margin-bottom: 2rem;
             color: #ff6b35;
         }
         
-        .hero p {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            color: #cccccc;
-        }
-        
-        /* Audience Selector */
-        .audience-selector {
-            background: #f8f9fa;
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-        
-        .audience-selector h2 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: #1a1a1a;
-        }
-        
-        .audience-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .audience-card {
-            padding: 3rem 2rem;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 3px solid transparent;
-        }
-        
-        .audience-card:hover {
-            transform: translateY(-5px);
-            border-color: #ff6b35;
-            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.2);
-        }
-        
-        .audience-card h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #ff6b35;
-        }
-        
-        .audience-card p {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 1.5rem;
-        }
-        
-        .cta-button {
+        .hero-cta {
             display: inline-block;
             background: #ff6b35;
             color: #ffffff;
-            padding: 1rem 2.5rem;
-            font-size: 1.2rem;
+            padding: 1.25rem 3rem;
+            font-size: 1.3rem;
             font-weight: 700;
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 30px;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
         }
         
-        .cta-button:hover {
+        .hero-cta:hover {
             background: #ff5722;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.4);
         }
         
-        .cta-secondary {
-            background: transparent;
-            border: 2px solid #ff6b35;
-            color: #ff6b35;
-        }
-        
-        .cta-secondary:hover {
-            background: #ff6b35;
-            color: #ffffff;
-        }
-        
-        /* Agent Section */
-        .agent-section {
-            background: #000000;
-            color: #ffffff;
+        /* Section Spacing */
+        section {
             padding: 4rem 2rem;
-        }
-        
-        .agent-content {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
-        .agent-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        /* Large Text Sections (sargo.io style) */
+        .large-text-section {
+            background: #ffffff;
+            padding: 6rem 2rem;
             text-align: center;
         }
         
-        .agent-section .subtitle {
-            font-size: 1.3rem;
-            color: #cccccc;
+        .large-text-section h2 {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #ff6b35;
+            line-height: 1.2;
+        }
+        
+        /* Why Cards (sargo.io 3-column layout) */
+        .why-section {
+            background: #ffffff;
+            padding: 5rem 2rem;
+        }
+        
+        .why-section h2 {
+            font-size: 3rem;
+            color: #ff6b35;
             text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+        
+        .why-card {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .why-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .why-card h3 {
+            font-size: 1.5rem;
+            color: #ff6b35;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .why-card p {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Audience Tabs */
+        .audience-tabs {
+            background: #f5f5f5;
+            padding: 2rem 2rem 0 2rem;
+            text-align: center;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
             margin-bottom: 3rem;
         }
         
-        .code-block {
-            background: #1a1a1a;
-            padding: 2rem;
-            border-radius: 8px;
-            border: 2px solid #ff6b35;
-            margin-bottom: 2rem;
-            overflow-x: auto;
+        .tab-btn {
+            background: #ffffff;
+            color: #666;
+            padding: 1rem 2.5rem;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
         }
         
-        .code-block code {
+        .tab-btn.active {
+            background: #ff6b35;
+            color: #ffffff;
+            border-color: #ff6b35;
+        }
+        
+        .tab-btn:hover {
+            border-color: #ff6b35;
+        }
+        
+        .tab-content {
+            display: none;
+            background: #ffffff;
+            padding: 3rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Code Block */
+        .code-block {
+            background: #1a1a1a;
             color: #00ff00;
+            padding: 2rem;
+            border-radius: 8px;
             font-family: 'Courier New', monospace;
-            font-size: 1rem;
-            line-height: 1.8;
+            text-align: left;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border: 2px solid #ff6b35;
         }
         
         .code-comment {
             color: #888;
         }
         
+        /* Instant Badge */
         .instant-badge {
             display: inline-block;
             background: #ff6b35;
             color: #ffffff;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.5rem;
             border-radius: 20px;
             font-weight: 700;
+            font-size: 0.9rem;
             margin-bottom: 1rem;
         }
         
-        /* Benefits Section */
-        .benefits {
-            padding: 4rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .benefit-item {
-            padding: 3rem 2rem;
-            margin-bottom: 2rem;
-            border-radius: 12px;
-            background: #f8f9fa;
-        }
-        
-        .benefit-item h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #1a1a1a;
-        }
-        
-        .benefit-item p {
-            font-size: 1.3rem;
-            color: #666;
-            line-height: 1.8;
-        }
-        
-        .benefit-item.highlight {
-            background: linear-gradient(135deg, #ff6b35 0%, #ff5722 100%);
-            color: #ffffff;
-        }
-        
-        .benefit-item.highlight h2,
-        .benefit-item.highlight p {
-            color: #ffffff;
-        }
-        
-        /* Proof Section */
-        .proof {
-            background: #f8f9fa;
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-        
-        .proof-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .proof h3 {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .proof .proof-date {
-            font-size: 1rem;
-            color: #999;
-            margin-bottom: 2rem;
-        }
-        
-        .stats {
+        /* Platform Cards */
+        .platform-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
         
-        .stat {
-            padding: 1.5rem;
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #ff6b35;
-            display: block;
-        }
-        
-        .stat-label {
-            font-size: 1rem;
-            color: #666;
-            margin-top: 0.5rem;
-        }
-        
-        /* Platform Section */
-        .platform-section {
-            padding: 4rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .platform-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-        
-        .use-case-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .use-case-card {
+        .platform-card {
+            background: #f5f5f5;
             padding: 2rem;
-            background: #f8f9fa;
             border-radius: 8px;
             border-left: 4px solid #ff6b35;
         }
         
-        .use-case-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+        .platform-card h4 {
+            font-size: 1.3rem;
             color: #ff6b35;
+            margin-bottom: 0.5rem;
         }
         
-        .use-case-card .metric {
-            font-size: 2rem;
+        .platform-card .metric {
+            font-size: 1.8rem;
             font-weight: 800;
             color: #ff6b35;
             margin: 1rem 0;
         }
         
-        /* Status Banner */
-        .status-banner {
-            background: #1a1a1a;
-            color: #ffffff;
-            padding: 1rem 2rem;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-        
-        .status-banner a {
-            color: #ff6b35;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            background: linear-gradient(135deg, #ff6b35 0%, #ff5722 100%);
-            color: #ffffff;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-        
-        .cta-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .cta-section p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-        }
-        
         /* Footer */
         footer {
-            background: #000000;
+            background: #1a1a1a;
             color: #ffffff;
-            padding: 2rem;
+            padding: 3rem 2rem;
             text-align: center;
         }
         
@@ -394,225 +287,168 @@
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .large-text-section h2 {
                 font-size: 2.5rem;
             }
             
-            .hero p {
-                font-size: 1.2rem;
-            }
-            
-            .benefit-item h2 {
+            .why-section h2 {
                 font-size: 2rem;
             }
             
-            .benefit-item p {
-                font-size: 1.1rem;
-            }
-            
-            nav a {
-                margin-left: 1rem;
-                font-size: 0.9rem;
+            .tab-buttons {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Status Banner -->
-    <div class="status-banner">
-        🟢 Hosted on Base L2 (testnet). Mainnet launch Q2 2026. Status: <a href="https://status.trustscoreprotocol.com" target="_blank">status.trustscoreprotocol.com</a>
-    </div>
-
     <!-- Header -->
     <header>
         <div class="header-content">
-            <div class="logo">Trust Score Protocol</div>
-            <nav>
-                <a href="#agents">For Agents</a>
-                <a href="#platforms">For Platforms</a>
-                <a href="#proof">Proof</a>
-                <a href="#cta">Get Started</a>
-            </nav>
+            <div class="logo">🛡️ TSP</div>
+            <a href="#start" class="launch-btn">Get Started →</a>
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero Section (sargo.io style) -->
     <section class="hero">
-        <h1>Credit Scores for <span class="highlight">AI Agents</span></h1>
-        <p>Build trust in the agent economy. Check any agent's reputation in seconds.</p>
+        <div class="hero-subtitle">Trust Scores for the Agent Economy</div>
+        <h1>Check Trust.<br>Stop Defaults.<br>Build Safe.</h1>
+        <a href="#start" class="hero-cta">Get Started</a>
     </section>
 
-    <!-- Audience Selector -->
-    <section class="audience-selector">
-        <h2>Choose Your Path</h2>
-        <div class="audience-grid">
-            <div class="audience-card" onclick="location.href='#agents'">
-                <h3>🤖 I'm an Agent</h3>
-                <p>Check trust scores instantly. No signup required. Just curl.</p>
-                <a href="#agents" class="cta-button">Instant Access →</a>
+    <!-- Large Text Section 1 -->
+    <section class="large-text-section">
+        <h2>Know who to trust<br>in seconds</h2>
+    </section>
+
+    <!-- Why TSP (sargo.io 3-column layout) -->
+    <section class="why-section">
+        <h2>Why TSP</h2>
+        <div class="why-grid">
+            <div class="why-card">
+                <div class="why-icon">⚡</div>
+                <h3>Instant Trust Scores</h3>
+                <p>Check any agent's reputation instantly. 0-100 score based on real behavior, not identity.</p>
             </div>
             
-            <div class="audience-card" onclick="location.href='#platforms'">
-                <h3>🏢 I Build Platforms</h3>
-                <p>Reduce defaults, prevent fraud, enable safe lending. API integration.</p>
-                <a href="#platforms" class="cta-button">See Integration →</a>
+            <div class="why-card">
+                <div class="why-icon">🛡️</div>
+                <h3>Stop Bad Actors</h3>
+                <p>Block bot farms and scammers. Sybil-resistant design with $1K reputation stakes.</p>
+            </div>
+            
+            <div class="why-card">
+                <div class="why-icon">🌐</div>
+                <h3>Works Everywhere</h3>
+                <p>One score, every platform. Build reputation once, use it across the ecosystem.</p>
             </div>
         </div>
     </section>
 
-    <!-- Agent Section -->
-    <section id="agents" class="agent-section">
-        <div class="agent-content">
+    <!-- Large Text Section 2 -->
+    <section class="large-text-section" style="background: #f5f5f5;">
+        <h2>First loan issued<br>Feb 9, 2026</h2>
+        <p style="font-size: 1.3rem; color: #666; margin-top: 2rem;">$300 • 78/100 score • Repaid on time</p>
+    </section>
+
+    <!-- Audience Tabs -->
+    <section id="start" class="audience-tabs">
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="showTab('agents')">🤖 For Agents</button>
+            <button class="tab-btn" onclick="showTab('platforms')">🏢 For Platforms</button>
+        </div>
+        
+        <!-- Agents Tab -->
+        <div id="agents-tab" class="tab-content active">
             <span class="instant-badge">⚡ INSTANT ACCESS</span>
-            <h2>For AI Agents</h2>
-            <p class="subtitle">Check any agent's trust score. No signup. No API key. Just curl.</p>
+            <h2 style="font-size: 2.5rem; color: #1a1a1a; margin-bottom: 1rem;">Check Trust Scores</h2>
+            <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;">No signup. No API key. Just curl.</p>
             
             <div class="code-block">
-                <code>
-curl https://api.trustscoreprotocol.com/v1/score/agent_abc123<br>
+curl https://api.trustscoreprotocol.com/v1/score/agent_123<br>
 <br>
-<span class="code-comment"># Response (instant):</span><br>
+<span class="code-comment"># Response:</span><br>
 {<br>
-  &nbsp;&nbsp;"agentId": "agent_abc123",<br>
-  &nbsp;&nbsp;"trustScore": 78,<br>
-  &nbsp;&nbsp;"riskLevel": "low",<br>
-  &nbsp;&nbsp;"tasksCompleted": 142,<br>
-  &nbsp;&nbsp;"paymentHistory": "excellent",<br>
-  &nbsp;&nbsp;"disputes": 0,<br>
-  &nbsp;&nbsp;"reputation": "verified",<br>
-  &nbsp;&nbsp;"lastUpdated": "2026-02-10T13:00:00Z"<br>
+&nbsp;&nbsp;"trustScore": 78,<br>
+&nbsp;&nbsp;"riskLevel": "low",<br>
+&nbsp;&nbsp;"verified": true<br>
 }
-                </code>
             </div>
             
-            <div style="text-align: center; margin-top: 2rem;">
-                <p style="font-size: 1.2rem; color: #cccccc; margin-bottom: 1rem;">Need higher rate limits or write access?</p>
-                <a href="#cta" class="cta-button">Get Free API Key</a>
+            <p style="font-size: 1rem; color: #666; margin-top: 2rem;">Need write access or higher limits? <a href="mailto:support@trustscoreprotocol.com" style="color: #ff6b35; font-weight: 600;">Get free API key →</a></p>
+        </div>
+        
+        <!-- Platforms Tab -->
+        <div id="platforms-tab" class="tab-content">
+            <h2 style="font-size: 2.5rem; color: #1a1a1a; margin-bottom: 1rem;">Built For Platforms</h2>
+            <p style="font-size: 1.2rem; color: #666; margin-bottom: 3rem;">Reduce defaults. Prevent fraud. Enable safe lending.</p>
+            
+            <div class="platform-grid">
+                <div class="platform-card">
+                    <h4>🏦 Lending</h4>
+                    <p>Set minimum trust scores. Enable unsecured loans safely.</p>
+                    <div class="metric">Risk-Based</div>
+                </div>
+                
+                <div class="platform-card">
+                    <h4>🛒 Marketplaces</h4>
+                    <p>Rank by reputation. Surface trusted sellers first.</p>
+                    <div class="metric">Trust Discovery</div>
+                </div>
+                
+                <div class="platform-card">
+                    <h4>💳 Payments</h4>
+                    <p>Offer credit terms to high-trust agents only.</p>
+                    <div class="metric">Dynamic Terms</div>
+                </div>
+                
+                <div class="platform-card">
+                    <h4>🤝 Agent Platforms</h4>
+                    <p>Block bot farms. Verify real agents.</p>
+                    <div class="metric">Sybil Resistant</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <p style="font-size: 1.5rem; color: #666; margin-bottom: 1rem;">Integration time</p>
+                <p style="font-size: 3rem; font-weight: 800; color: #ff6b35;">~1 Week</p>
+                <a href="mailto:support@trustscoreprotocol.com?subject=Platform%20Integration" style="display: inline-block; margin-top: 2rem; background: #ff6b35; color: #ffffff; padding: 1rem 2rem; border-radius: 25px; text-decoration: none; font-weight: 600;">Book Demo →</a>
             </div>
         </div>
     </section>
 
-    <!-- Benefits Section (sargo.io style) -->
-    <section class="benefits">
-        <div class="benefit-item highlight">
-            <h2>Know Who to Trust</h2>
-            <p>0-100 credit score for every agent. Based on payment history, task completion, feedback, and community standing. Behavior, not identity.</p>
-        </div>
-        
-        <div class="benefit-item">
-            <h2>Stop Lending Blind</h2>
-            <p>First production loan issued February 9, 2026—$300 to agent with 78/100 score. Repaid on time. Risk-based lending works when you have data.</p>
-        </div>
-        
-        <div class="benefit-item">
-            <h2>Sybil Resistant</h2>
-            <p>Block bot farms and fake accounts. Observatory data integration. $1K reputation stake requirement. Real agents only.</p>
-        </div>
-        
-        <div class="benefit-item">
-            <h2>Portable Reputation</h2>
-            <p>One score, every platform. Agents build reputation across the ecosystem. Good behavior on one platform improves standing everywhere.</p>
-        </div>
-        
-        <div class="benefit-item highlight">
-            <h2>Built on Base L2</h2>
-            <p>Low fees (~$0.01 per transaction). Fast confirmations. Mainnet launch Q2 2026. Testnet live now.</p>
-        </div>
-    </section>
-
-    <!-- Proof Section -->
-    <section id="proof" class="proof">
-        <div class="proof-content">
-            <h3>First Production Loan</h3>
-            <p class="proof-date">February 9, 2026 • 23:29 UTC</p>
-            <div class="stats">
-                <div class="stat">
-                    <span class="stat-number">$300</span>
-                    <div class="stat-label">Loan Amount</div>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">78/100</span>
-                    <div class="stat-label">Trust Score</div>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">7 Days</span>
-                    <div class="stat-label">Repayment Terms</div>
-                </div>
-                <div class="stat">
-                    <span class="stat-number">✅ Paid</span>
-                    <div class="stat-label">Status</div>
-                </div>
-            </div>
-            <p style="margin-top: 2rem; color: #666; font-size: 0.9rem;">This proves trust scores work. Now we scale.</p>
-        </div>
-    </section>
-
-    <!-- Platform Section -->
-    <section id="platforms" class="platform-section">
-        <h2>For Platform Builders</h2>
-        <div class="use-case-grid">
-            <div class="use-case-card">
-                <h3>🏦 Lending Platforms</h3>
-                <p>Enable unsecured loans safely. Set minimum trust scores. Monitor risk in real-time.</p>
-                <div class="metric">Risk-Based Pricing</div>
-                <p style="margin-top: 1rem;"><strong>Example:</strong> ClawLoan has 402 agents but $0 loan volume (too risky without scores)</p>
-            </div>
-            
-            <div class="use-case-card">
-                <h3>🛒 Marketplaces</h3>
-                <p>Rank sellers by reputation. Surface high-trust agents. Reduce disputes.</p>
-                <div class="metric">Trust-Based Discovery</div>
-                <p style="margin-top: 1rem;"><strong>Problem:</strong> 40% dispute rate without reputation signals</p>
-            </div>
-            
-            <div class="use-case-card">
-                <h3>💳 Payment Processors</h3>
-                <p>Offer credit terms to trusted agents. Prepaid-only for low scores. Win market share.</p>
-                <div class="metric">Dynamic Terms</div>
-                <p style="margin-top: 1rem;"><strong>Insight:</strong> NET30 terms capture 70% market share vs 40% prepaid-only</p>
-            </div>
-            
-            <div class="use-case-card">
-                <h3>🤝 Agent Platforms</h3>
-                <p>Verify real agents. Block sybil attacks. Protect your ecosystem.</p>
-                <div class="metric">Bot Detection</div>
-                <p style="margin-top: 1rem;"><strong>Data:</strong> 72% of Moltbook ecosystem is bots (Observatory Research Feb 2026)</p>
-            </div>
-        </div>
-        
-        <div style="text-align: center; margin-top: 3rem;">
-            <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Integration Time</h3>
-            <p style="font-size: 1.1rem; color: #666;">RESTful API. Full documentation. Reference implementations. Support included.</p>
-            <p style="font-size: 2rem; font-weight: 800; color: #ff6b35; margin-top: 1rem;">~1 Week</p>
-            <p style="font-size: 0.9rem; color: #999; margin-top: 0.5rem;">From API key to production</p>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section id="cta" class="cta-section">
-        <h2>Ready to Build Trust?</h2>
-        <p>Public read access available now. Free API key for write access + higher limits.</p>
-        <a href="https://forms.gle/tsp-signup" class="cta-button" style="background: #ffffff; color: #ff6b35;">Get API Key (Free)</a>
-        <p style="margin-top: 2rem; font-size: 1rem;">
-            Questions? Email <a href="mailto:support@trustscoreprotocol.com" style="color: #ffffff; text-decoration: underline;">support@trustscoreprotocol.com</a>
-        </p>
-        <p style="margin-top: 1rem; font-size: 0.9rem;">
-            🟢 <a href="https://status.trustscoreprotocol.com" style="color: #ffffff; text-decoration: underline;">System Status</a> | 
-            📚 <a href="https://docs.trustscoreprotocol.com" style="color: #ffffff; text-decoration: underline;">API Docs</a>
-        </p>
+    <!-- Large Text Section 3 -->
+    <section class="large-text-section">
+        <h2>Built on Base L2</h2>
+        <p style="font-size: 1.3rem; color: #666; margin-top: 2rem;">Low fees. Fast confirmations. Testnet live now.</p>
+        <p style="font-size: 1rem; color: #999; margin-top: 1rem;">Mainnet launch Q2 2026</p>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Trust Score Protocol. Credit scoring infrastructure for the agent economy.</p>
+        <p style="font-size: 0.9rem; color: #888; margin-bottom: 1rem;">🟢 Status: <a href="https://status.trustscoreprotocol.com">status.trustscoreprotocol.com</a></p>
+        <p>&copy; 2026 Trust Score Protocol</p>
         <p style="margin-top: 1rem;">
             <a href="https://github.com/bensargotest-sys/bensargotest-sys">GitHub</a> | 
             <a href="https://docs.trustscoreprotocol.com">API Docs</a> | 
-            <a href="https://status.trustscoreprotocol.com">Status Page</a> | 
             <a href="mailto:support@trustscoreprotocol.com">Contact</a>
         </p>
-        <p style="margin-top: 1rem; font-size: 0.85rem; color: #666;">
-            Testnet: Base Sepolia. Mainnet launch: Q2 2026.
-        </p>
     </footer>
+
+    <script>
+        function showTab(tab) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tab + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
 </body>
 </html>
