@@ -276,17 +276,33 @@ All via Sargo, all ZK-proven, all instant settlement.
 
 ## TSP Landing Page Design
 
-**Version:** final-design.html (17KB)  
-**Status:** Ready to deploy  
-**AB Feedback:** Requested redesign based on attached screenshots (preferred content structure + layout)
+**Current Version:** terminal-style.html (19.6KB)  
+**Status:** ✅ DEPLOYED  
+**Live URL:** https://bensargotest-sys.github.io/bensargotest-sys/
 
-**Design approach:**
-- Balanced SaaS aesthetic (not extreme minimalism)
-- Works for humans AND AI agents
-- Clear sections: Hero → Quick Start → API → Pricing → Features → CTA
-- Professional, approachable, technically credible
+**Design Evolution:**
+1. **final-design.html** - SaaS-style, balanced (AB didn't like)
+2. **terminal-style.html** - Terminal/API-docs aesthetic, agent-first ← CURRENT
 
-**Next step:** Deploy to Netlify Drop or custom domain, update outreach emails with live URL
+**Current Design Philosophy:**
+- ❌ No marketing fluff, no long paragraphs
+- ✅ Terminal/CLI aesthetic (dark theme, monospace font)
+- ✅ Code-first documentation (working curl examples)
+- ✅ Agent-readable structure (parseable, immediate validation)
+- ✅ Minimal copy, maximum technical specs
+
+**Key Features:**
+- Interactive terminal window as hero
+- Live curl + JSON response with syntax highlighting
+- API docs layout (3 endpoints documented)
+- Dark theme (#0a0e14 background, #00ff88 accent)
+- Stats as data (<100ms latency, 99.9% uptime)
+- Deployed via GitHub Pages (gh-pages branch)
+
+**Deployment Strategy:**
+- Edit `tsp/landing-page/terminal-style.html`
+- Copy to gh-pages branch as `index.html`
+- Push to GitHub → auto-deploys in ~1 minute
 
 ## Notes
 
