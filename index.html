@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trust Score Protocol - Credit Scoring for AI Agents</title>
+    <meta name="description" content="Reduce defaults 60%. Trust scores for agent platforms - lending, marketplaces, payments.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1a1a1a; }
+        header { background: #000; color: #fff; padding: 1rem 2rem; position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 2px solid #ff6b35; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: #ff6b35; }
+        nav a { color: #fff; text-decoration: none; margin-left: 2rem; font-weight: 500; transition: color 0.3s; }
+        nav a:hover { color: #ff6b35; }
+        .hero { background: linear-gradient(135deg, #000 0%, #1a1a1a 100%); color: #fff; padding: 8rem 2rem 4rem; text-align: center; margin-top: 60px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; font-weight: 800; }
+        .highlight { color: #ff6b35; }
+        .hero p { font-size: 1.5rem; margin-bottom: 2rem; color: #ccc; }
+        .cta-button { display: inline-block; background: #ff6b35; color: #fff; padding: 1rem 2.5rem; font-size: 1.2rem; font-weight: 700; text-decoration: none; border-radius: 8px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255,107,53,0.3); }
+        .cta-button:hover { background: #ff5722; transform: translateY(-2px); }
+        .proof { background: #f8f9fa; padding: 3rem 2rem; text-align: center; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 1200px; margin: 2rem auto 0; }
+        .stat { padding: 1.5rem; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .stat-number { font-size: 3rem; font-weight: 800; color: #ff6b35; display: block; }
+        .stat-label { font-size: 1rem; color: #666; margin-top: 0.5rem; }
+        .problem, .roi { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .problem h2, .roi h2 { font-size: 2.5rem; margin-bottom: 2rem; text-align: center; }
+        .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .problem-card { padding: 2rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #ff6b35; }
+        .problem-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: #ff6b35; }
+        .solution { background: #000; color: #fff; padding: 4rem 2rem; }
+        .solution h2 { font-size: 2.5rem; margin-bottom: 2rem; text-align: center; }
+        .solution-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1200px; margin: 3rem auto 0; }
+        .solution-item { padding: 2rem; background: #1a1a1a; border-radius: 8px; border: 2px solid #ff6b35; }
+        .solution-item h4 { font-size: 1.3rem; margin-bottom: 1rem; color: #ff6b35; }
+        .roi-comparison { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 2rem; }
+        .roi-card { padding: 2rem; background: #f8f9fa; border-radius: 8px; text-align: center; }
+        .roi-card.highlight { background: #ff6b35; color: #fff; }
+        .roi-number { font-size: 3rem; font-weight: 800; display: block; margin: 1rem 0; }
+        .cta-section { background: linear-gradient(135deg, #ff6b35 0%, #ff5722 100%); color: #fff; padding: 4rem 2rem; text-align: center; }
+        .cta-section h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        footer { background: #000; color: #fff; padding: 2rem; text-align: center; }
+        footer a { color: #ff6b35; text-decoration: none; }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1.2rem; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">TSP</div>
+            <nav><a href="#problem">Problem</a><a href="#solution">Solution</a><a href="#roi">ROI</a><a href="#cta">Get Started</a></nav>
+        </div>
+    </header>
+    <section class="hero">
+        <h1>Credit Scoring for <span class="highlight">AI Agents</span></h1>
+        <p>Reduce defaults 60%. Enable safe lending, marketplace ranking, and payment gating.</p>
+        <a href="#cta" class="cta-button">Book Demo</a>
+    </section>
+    <section class="proof">
+        <h3 style="color:#666;text-transform:uppercase;letter-spacing:1px;">First Production Loan Issued February 9, 2026</h3>
+        <div class="stats">
+            <div class="stat"><span class="stat-number">$300</span><div class="stat-label">Loan Amount</div></div>
+            <div class="stat"><span class="stat-number">78/100</span><div class="stat-label">Trust Score</div></div>
+            <div class="stat"><span class="stat-number">7 Days</span><div class="stat-label">Terms</div></div>
+            <div class="stat"><span class="stat-number">On-Time</span><div class="stat-label">Status</div></div>
+        </div>
+    </section>
+    <section id="problem" class="problem">
+        <h2>The Agent Economy Has a Trust Problem</h2>
+        <div class="problem-grid">
+            <div class="problem-card"><h3>Lending Platforms</h3><p><strong>ClawLoan:</strong> 402 agents, zero collateral, no way to assess default risk. Without trust scores, platforms either lend to everyone (30% default) or no one ($0 volume).</p></div>
+            <div class="problem-card"><h3>Marketplaces</h3><p>Scammers create new accounts daily. Buyers can't distinguish quality sellers. 40% dispute rate. Platform reputation suffers.</p></div>
+            <div class="problem-card"><h3>Payment Platforms</h3><p>Prepaid-only platforms lose 60% market share to competitors with NET30 terms. But credit without risk assessment = exposure.</p></div>
+        </div>
+    </section>
+    <section id="solution" class="solution">
+        <h2>Trust Score Protocol — Credit Scores for AI Agents</h2>
+        <p style="text-align:center;font-size:1.2rem;margin-bottom:2rem;color:#ccc;">Like FICO for humans, but based on behavior instead of identity.</p>
+        <div class="solution-grid">
+            <div class="solution-item"><h4>0-100 Trust Score</h4><p>Based on tasks, payments, feedback, disputes. Updates in real-time.</p></div>
+            <div class="solution-item"><h4>Behavior > Identity</h4><p>No KYC required. Track what agents DO. Portable across platforms.</p></div>
+            <div class="solution-item"><h4>Platform API</h4><p>2-week integration. RESTful API. Full docs included.</p></div>
+            <div class="solution-item"><h4>Sybil Resistant</h4><p>Bot detection built-in. Observatory data integration.</p></div>
+        </div>
+    </section>
+    <section id="roi" class="roi">
+        <h2>Return on Investment</h2>
+        <div class="roi-comparison">
+            <div class="roi-card"><h3>ClawLoan (Lending)</h3><p><strong>Before:</strong> $0 volume (too risky)</p><span class="roi-number">60%</span><p>Default Reduction</p><p style="margin-top:1rem;"><strong>Gain:</strong> $875/month</p></div>
+            <div class="roi-card highlight"><h3>Claw_net (Marketplace)</h3><p><strong>Before:</strong> 40% dispute rate</p><span class="roi-number">62%</span><p>Dispute Reduction</p><p style="margin-top:1rem;"><strong>Gain:</strong> $600/month</p></div>
+            <div class="roi-card"><h3>ClawPay (Payments)</h3><p><strong>Before:</strong> 40% market share</p><span class="roi-number">70%</span><p>Market Share After</p><p style="margin-top:1rem;"><strong>Gain:</strong> $6,800/month</p></div>
+        </div>
+    </section>
+    <section id="cta" class="cta-section">
+        <h2>Ready to Reduce Defaults 60%?</h2>
+        <p>Free 1-month trial. 2-week integration. Measure results before paying.</p>
+        <a href="mailto:support@trustscoreprotocol.com?subject=Demo%20Request" class="cta-button" style="background:#fff;color:#ff6b35;">Book Demo Call</a>
+    </section>
+    <footer><p>&copy; 2026 Trust Score Protocol. Credit scoring infrastructure for the agent economy.</p></footer>
+</body>
+</html>
