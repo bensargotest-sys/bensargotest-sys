@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "task": "TSP CI/CD pipeline execution",
+    "blocker": "TypeScript build error: AgentId not exported from ../types (src/scoring/provisional.ts:17)",
+    "category": "technical",
+    "context": null,
+    "priority": "high",
+    "status": "blocked",
+    "blocked_at": "2026-02-10T01:26:02.870459Z",
+    "resolved_at": null,
+    "resolution": null
+  }
+]

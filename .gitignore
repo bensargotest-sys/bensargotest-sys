@@ -1,0 +1,29 @@
+# Nested git repos (handle separately)
+tsp/
+tsp-fresh/
+tsp-integration/
+
+# Node modules
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.key
+*.pem
+.env.local
+
+# Temp
+*.tmp
+*.swp
+*~

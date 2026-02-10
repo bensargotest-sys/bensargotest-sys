@@ -1,0 +1,29 @@
+{
+  "lastHeartbeat": "2026-02-10T11:49:15.920243+00:00",
+  "heartbeatWorkItems": 29,
+  "consecutiveNoWork": 0,
+  "lastChecks": {
+    "email": null,
+    "calendar": null,
+    "weather": null,
+    "mentions": null,
+    "tsp_metrics": null,
+    "server_health": null
+  },
+  "lastMistakeCheck": {
+    "toolFailed": false,
+    "agentStalled": false,
+    "unexpected": false,
+    "timestamp": null
+  },
+  "toolRotation": {
+    "heartbeatCount": 20,
+    "lastSelfEval": null,
+    "lastMemoryConsolidation": null,
+    "lastSkillAudit": null,
+    "lastFullReview": null,
+    "lastTSPFeedbackScan": null,
+    "lastWeeklyReview": null
+  },
+  "notes": "Tracks heartbeat timing, work completion, periodic checks, and tool rotation schedule per HEARTBEAT.md"
+}

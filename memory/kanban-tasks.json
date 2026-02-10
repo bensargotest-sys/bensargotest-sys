@@ -1,0 +1,81 @@
+{
+  "tasks": [
+    {
+      "id": "task-001",
+      "title": "Set up Hostinger firewall rules",
+      "description": "Block all inbound except SSH (22) and HTTPS (443). Specifically block OpenClaw ports 59415 and 63362.",
+      "category": "security",
+      "priority": "critical",
+      "column": "in-progress",
+      "createdBy": "human",
+      "createdAt": "2026-02-09T17:44:00Z",
+      "assignedAgent": null,
+      "scope": "Document exact firewall rules needed, provide Hostinger panel instructions",
+      "outputFiles": ["workspace/FIREWALL-SETUP.md"],
+      "movedAt": "2026-02-09T17:44:00Z",
+      "completedAt": null,
+      "blockedReason": "Requires human to access Hostinger panel"
+    },
+    {
+      "id": "task-002",
+      "title": "Set up automated Docker volume backups",
+      "description": "Create backup script for /data/.openclaw with daily schedule",
+      "category": "infrastructure",
+      "priority": "critical",
+      "column": "done",
+      "createdBy": "agent",
+      "createdAt": "2026-02-09T17:44:00Z",
+      "assignedAgent": "agent:main",
+      "scope": "Build backup script, test restore procedure, schedule daily run",
+      "outputFiles": ["tools/backup.sh", "tools/restore.sh", "BACKUP-GUIDE.md"],
+      "movedAt": "2026-02-09T17:46:00Z",
+      "completedAt": "2026-02-09T17:48:00Z"
+    },
+    {
+      "id": "task-003",
+      "title": "Create workspace directory structure",
+      "description": "Set up memory/, tools/, reviews/, workflows/ directories per guide",
+      "category": "setup",
+      "priority": "high",
+      "column": "backlog",
+      "createdBy": "agent",
+      "createdAt": "2026-02-09T17:44:00Z",
+      "assignedAgent": null,
+      "scope": "Create dirs, initialize core files, set permissions",
+      "outputFiles": [],
+      "movedAt": null,
+      "completedAt": null
+    },
+    {
+      "id": "task-004",
+      "title": "Build checkpoint.py tool",
+      "description": "Save working state to survive context compaction",
+      "category": "tools",
+      "priority": "high",
+      "column": "backlog",
+      "createdBy": "agent",
+      "createdAt": "2026-02-09T17:44:00Z",
+      "assignedAgent": null,
+      "scope": "Implement --auto and --handoff modes, test recovery",
+      "outputFiles": ["tools/checkpoint.py"],
+      "movedAt": null,
+      "completedAt": null
+    },
+    {
+      "id": "task-005",
+      "title": "Configure Tailscale HTTPS access",
+      "description": "Enable secure web access to Control UI via Tailscale",
+      "category": "security",
+      "priority": "high",
+      "column": "backlog",
+      "createdBy": "human",
+      "createdAt": "2026-02-09T17:44:00Z",
+      "assignedAgent": null,
+      "scope": "Install Tailscale on VPS host, configure OpenClaw gateway for Tailscale Serve",
+      "outputFiles": ["workspace/TAILSCALE-SETUP.md"],
+      "movedAt": null,
+      "completedAt": null,
+      "blockedReason": "Requires host SSH access (not container)"
+    }
+  ]
+}
