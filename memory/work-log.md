@@ -580,3 +580,22 @@ Created analyst agent spawn template: workflows/analyst-agent-template.md (17052
 Scanned friction-log.md for patterns: 1 pattern at 3+ occurrences (file finding - QMD in progress), 2 patterns below threshold, 2 resolved patterns. Logged blocker for Formspree signup check (requires credentials).
 [2026-02-10 12:33 UTC] Built remaining ops guide tools (enforcement_watchdog.py, memory_consolidate.py, archive_audit.py) - 15.6KB total. Tested infrastructure: spawned Researcher subagent for QMD research, verified logging works (100% success rate). All tools functional. Committed (d3d5e17). System health: all enforcement gates healthy.
 [2026-02-10 12:35 UTC] QMD installation RESOLVED ✅ Researcher found real source (github.com/tobi/qmd, 7.7k stars). Installed from GitHub via Bun. Workspace indexed (28 .md files). Search tested and functional. Commands: qmd search/vsearch/query. Friction log updated as resolved. Subagent runtime: 2m21s, 100% success rate.
+
+## 2026-02-10 13:19 UTC [Heartbeat]
+Tested subagent_log.py: All commands working (report shows 4 spawns with 3 completed, recent shows spawn history with durations, health returns HEALTHY). Evidence: python3 tools/subagent_log.py report|recent|health all execute successfully.
+2026-02-10 13:19:48 UTC - Tested subagent_log.py tool: Verified all commands work correctly. 'report' shows 4 total spawns (1 started, 3 completed, 0 failed). 'recent 5' displays last 4 spawns with timestamps and durations (test-coder, researcher-qmd x3). 'health' returns HEALTHY (no cascade failures detected). Tool is production-ready. Evidence: python3 tools/subagent_log.py report|recent 5|health all execute without errors and return expected data.
+2026-02-10 13:25:26 UTC - TSP CI/CD Run (system-triggered): FAILED - .openclaw/ci.sh does not exist in tsp/testnet-mvp/. Script path incorrect in cron job configuration. Need to either create ci.sh or update cron to use existing build commands.
+
+## 2026-02-10 13:52 UTC [Heartbeat]
+Tested mistake_promoter.py: scan finds 1 recurring pattern (subagent-fail, 3 occurrences), stats shows 6 total mistakes with 50% promotion rate (healthy). Tool working correctly.
+2026-02-10 13:52:52 UTC - Tested mistake_promoter.py tool: Verified both scan and stats commands work correctly. 'scan' found 1 recurring pattern (subagent-fail with 3 occurrences related to backup.sh permission issues). 'stats' shows 6 total mistakes, 2 unique patterns, 1 recurring, 3 promoted to rules, 50% promotion rate (healthy threshold >30%). Tool is production-ready for weekly mistake review. Evidence: python3 tools/mistake_promoter.py scan|stats both execute without errors.
+2026-02-10 14:24:41 UTC - TSP CI/CD Run (system-triggered): Script .openclaw/ci.sh does not exist in tsp/testnet-mvp/. Cron job needs fixing. Blocker persists.
+
+## 2026-02-10 14:30 UTC [Heartbeat]
+Checked GitHub repo (bensargotest-sys/bensargotest-sys): 0 stars, 0 forks, 0 watchers, 0 issues/PRs. Latest commit: 'feat: Agent-first landing page' from 1h ago. No community engagement yet.
+2026-02-10 14:30:55 UTC - Checked GitHub repository status: https://github.com/bensargotest-sys/bensargotest-sys shows 0 stars, 0 forks, 0 watchers. No issues or pull requests. Latest commit: 'feat: Agent-first landing page for AI agents' from 1 hour ago (Feb 10, 2026 12:40 PM UTC). Repository is public with HTML content. No community engagement detected yet. Evidence: Browser snapshot shows star count in heading 'Stars' section with strong '0' text.
+2026-02-10 15:10:19 UTC - TSP Database Backup (system-triggered): FAILED - scripts/backup.sh does not exist in tsp/testnet-mvp/. Cron job configured to run non-existent script. Need to create backup script or update cron configuration.
+
+## 2026-02-10 15:10 UTC [Heartbeat]
+TSP backup failed: scripts/backup.sh doesn't exist. Added blocker #3. Logged mistake: TSP cron jobs misconfigured (both ci.sh and backup.sh missing).
+2026-02-10 15:24:46 UTC - TSP CI/CD Run (system-triggered): Script .openclaw/ci.sh does not exist. Blocker #1 persists (misconfigured cron jobs).

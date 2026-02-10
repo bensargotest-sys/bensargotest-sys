@@ -22,5 +22,17 @@
     "blocked_at": "2026-02-10T12:26:58.552473Z",
     "resolved_at": null,
     "resolution": null
+  },
+  {
+    "id": 3,
+    "task": "TSP database backup execution",
+    "blocker": "Script scripts/backup.sh does not exist in tsp/testnet-mvp/. Cron job configured to run non-existent script.",
+    "category": "general",
+    "context": null,
+    "priority": "medium",
+    "status": "blocked",
+    "blocked_at": "2026-02-10T15:10:24.035144Z",
+    "resolved_at": null,
+    "resolution": null
   }
 ]

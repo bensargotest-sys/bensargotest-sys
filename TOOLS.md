@@ -189,3 +189,22 @@ python3 tools/blocked_items.py summary
 ---
 
 Add whatever helps you do your job. This is your cheat sheet.
+## GitHub Credentials
+
+### Location
+- **File:** `/data/.openclaw/workspace/.github-credentials`
+- **Permissions:** 600 (read-only for agent)
+- **Repository:** bensargotest-sys/bensargotest-sys
+
+### Configuration
+GitHub credentials are stored in `.github-credentials` file (not tracked in git).
+
+### Usage
+```bash
+# To push to GitHub:
+source /data/.openclaw/workspace/.github-credentials
+git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${GITHUB_REPO}.git
+git push origin main
+```
+
+**Token stored securely - never commit to git**

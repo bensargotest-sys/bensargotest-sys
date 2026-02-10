@@ -14,13 +14,14 @@ python3 tools/heartbeat_enforcer.py check
 ## The Loop
 
 1. Read heartbeat-state.json and WORKING_STATE.md
-2. Run compaction guard. If STALE, checkpoint immediately.
-3. Check rate limiter. If rate-limited, stop.
-4. Run any monitors or position checks (quick, <10 seconds)
-5. Pick one item from memory/heartbeat-backlog.md and COMPLETE it
-6. Run one tool from the rotation schedule
-7. Log to memory/work-log.md with timestamp and evidence
-8. Update heartbeat-state.json
+2. **If TSP work planned:** Run `bash tsp/.tsp-context-guard` to verify context
+3. Run compaction guard. If STALE, checkpoint immediately.
+4. Check rate limiter. If rate-limited, stop.
+5. Run any monitors or position checks (quick, <10 seconds)
+6. Pick one item from memory/heartbeat-backlog.md and COMPLETE it
+7. Run one tool from the rotation schedule
+8. Log to memory/work-log.md with timestamp and evidence
+9. Update heartbeat-state.json
 
 ## Compaction Guard (CRITICAL)
 

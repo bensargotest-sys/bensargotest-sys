@@ -9,14 +9,14 @@ Pick based on available time: ⚡5min | 🔧15min | 📝30min | 🔬60min
 ### TSP Launch Support
 - [ ] ⚡ Check Formspree for signups every 6 hours
 - [ ] ⚡ Monitor Moltbook for comments on TSP posts
-- [ ] ⚡ Check GitHub for stars/issues
+- [x] ⚡ Check GitHub for stars/issues
 - [ ] 🔧 Update TSP metrics dashboard (signup count, karma, responses)
 - [ ] 📝 Analyze first customer feedback (when received)
 
 ### Ops Guide Implementation
 - [ ] 🔧 Fix QMD installation (proper npm/bun setup)
-- [ ] ⚡ Test subagent_log.py with real spawn
-- [ ] ⚡ Test mistake_promoter.py scan
+- [x] ⚡ Test subagent_log.py with real spawn
+- [x] ⚡ Test mistake_promoter.py scan
 - [ ] 📝 Document new tools in TOOLS.md
 - [ ] 🔧 Build enforcement_watchdog.py (check gate compliance)
 - [ ] 🔧 Build memory_consolidate.py (4-tier consolidation)
