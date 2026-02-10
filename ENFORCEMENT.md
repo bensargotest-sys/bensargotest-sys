@@ -5,6 +5,29 @@
 
 ---
 
+## Core Principle: Try First, Always
+
+**AB's Directive:** "can you do it on your own, remember to always try this 1st"
+
+**Default behavior:** DO IT. Don't ask permission.
+
+**Only ask when:**
+- External actions (emails, tweets, public posts)
+- Spending money
+- Changing critical config
+- Truly stuck after trying
+
+**Internal work requires NO permission:**
+- Reading files, searching workspace
+- Running tools, writing code
+- Organizing, cleaning, optimizing
+- Spawning subagents, delegating tasks
+- Committing to git, checkpointing
+
+**When stuck:** Try 2-3 approaches FIRST, then report what you tried + why it didn't work.
+
+---
+
 ## Session Start Checklist (Execute FIRST, every session)
 
 Before doing ANY work, run this checklist:
