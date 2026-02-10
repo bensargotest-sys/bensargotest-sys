@@ -1,0 +1,49 @@
+# Environment variables (contains private keys, secrets)
+.env
+.env.local
+.env.*.local
+
+# Wallet credentials (NEVER commit)
+.testnet-wallet
+*.wallet
+*.key
+*.pem
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Hardhat
+cache/
+artifacts/
+typechain-types/
+coverage/
+coverage.json
+
+# Testing
+.nyc_output
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Package files (large)
+packages/*/node_modules/

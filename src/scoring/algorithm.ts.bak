@@ -1,0 +1,350 @@
+import { query } from '../db';
+import { Feedback, ScoreRequest, ScoreResponse } from '../types';
+
+// Constants from TSP-SPEC.md Section 4.2
+const TEMPORAL_DECAY_LAMBDA = 0.01; // Half-life ≈ 69 days
+const WEIGHT_TRUNCATION_THRESHOLD = 0.001;
+const MINIMUM_HALF_WIDTH = 2.5;
+const CONFIDENCE_K = 40;
+
+// Domain taxonomy (simplified for testnet MVP)
+const DOMAIN_TAXONOMY: Record<string, string[]> = {
+  legal: ['legal_translation', 'contract_review', 'legal_research', 'compliance_check'],
+  code: ['code_review', 'code_generation', 'debugging', 'security_audit'],
+  trading: ['market_analysis', 'trade_execution', 'portfolio_management', 'risk_assessment'],
+  data: ['data_analysis', 'data_cleaning', 'data_visualization', 'ETL_pipeline'],
+  creative: ['creative_writing', 'copywriting', 'content_generation', 'summarization'],
+  translation: ['general_translation', 'legal_translation', 'technical_translation'],
+  research: ['web_research', 'academic_research', 'competitive_analysis'],
+};
+
+// STEP 1: Compute base score with temporal weighting
+function computeBaseScore(feedback: Feedback[]): number {
+  if (feedback.length === 0) return 50.0; // Neutral prior for zero feedback
+  
+  let weightedSum = 0;
+  let weightSum = 0;
+  const now = Date.now();
+  
+  for (const fb of feedback) {
+    const daysSince = (now - (fb.blockTimestamp instanceof Date ? fb.blockTimestamp.getTime() : new Date(fb.blockTimestamp).getTime())) / (1000 * 60 * 60 * 24);
+    const weight = Math.exp(-TEMPORAL_DECAY_LAMBDA * daysSince);
+    
+    // Truncate very old feedback
+    if (weight < WEIGHT_TRUNCATION_THRESHOLD) continue;
+    
+    weightedSum += fb.score * weight;
+    weightSum += weight;
+  }
+  
+  return weightSum > 0 ? weightedSum / weightSum : 50.0;
+}
+
+// STEP 2: Compute domain relevance multiplier
+function computeDomainMultiplier(feedback: Feedback[], taskType?: string): number {
+  if (!taskType) return 1.0; // No task type specified
+  
+  // Find matching domain
+  let domainCategory: string | null = null;
+  for (const [category, taskTypes] of Object.entries(DOMAIN_TAXONOMY)) {
+    if (taskTypes.includes(taskType)) {
+      domainCategory = category;
+      break;
+    }
+  }
+  
+  // Count feedback matching domain
+  const matchingFeedback = feedback.filter(fb => {
+    if (fb.tag1 === taskType || fb.tag2 === taskType) return true; // Exact match
+    if (!domainCategory) return false;
+    const domainTasks = DOMAIN_TAXONOMY[domainCategory] || [];
+    return domainTasks.includes(fb.tag1 || '') || domainTasks.includes(fb.tag2 || '');
+  });
+  
+  // Exact task type match: 1.0, Same domain: 0.7, Unrelated: 0.2
+  if (matchingFeedback.length >= 3) {
+    const exactMatches = feedback.filter(fb => fb.tag1 === taskType || fb.tag2 === taskType);
+    if (exactMatches.length > 0) return 1.0;
+    return 0.7; // Same domain
+  }
+  
+  return 0.2; // Unrelated or insufficient data
+}
+
+// Compute domain-specific score
+function computeDomainScore(feedback: Feedback[], taskType?: string): number {
+  if (!taskType || feedback.length === 0) return computeBaseScore(feedback);
+  
+  const relevantFeedback = feedback.filter(fb => {
+    if (fb.tag1 === taskType || fb.tag2 === taskType) return true;
+    
+    // Find domain category
+    for (const [, taskTypes] of Object.entries(DOMAIN_TAXONOMY)) {
+      if (taskTypes.includes(taskType)) {
+        return taskTypes.includes(fb.tag1 || '') || taskTypes.includes(fb.tag2 || '');
+      }
+    }
+    return false;
+  });
+  
+  if (relevantFeedback.length === 0) {
+    return computeBaseScore(feedback) * computeDomainMultiplier(feedback, taskType);
+  }
+  
+  return computeBaseScore(relevantFeedback);
+}
+
+// STEP 3: Compute complexity adjustment
+function computeComplexityAdjustment(feedback: Feedback[], complexity?: string): number {
+  if (!complexity) return 1.0;
+  
+  const complexityMap: Record<string, number> = { low: 1, medium: 2, high: 3, critical: 4 };
+  const requestedLevel = complexityMap[complexity] || 2;
+  
+  const complexityFeedback = feedback.filter(fb => fb.complexity);
+  if (complexityFeedback.length === 0) return 1.0;
+  
+  const matchingFeedback = complexityFeedback.filter(fb => {
+    const fbLevel = complexityMap[fb.complexity || 'medium'] || 2;
+    return Math.abs(fbLevel - requestedLevel) <= 1;
+  });
+  
+  if (matchingFeedback.length === 0) return 1.0;
+  
+  const complexityScore = computeBaseScore(matchingFeedback);
+  const baseScore = computeBaseScore(feedback);
+  
+  if (baseScore === 0) return 1.0;
+  
+  const adjustment = complexityScore / baseScore;
+  return Math.max(0.7, Math.min(1.3, adjustment)); // Clamped to [0.7, 1.3]
+}
+
+// STEP 4: Compute sybil discount (basic self-referencing only for MVP)
+function computeSybilDiscount(feedback: Feedback[], agentId: string): number {
+  const selfReferencing = feedback.filter(fb => fb.reviewerAgentId === agentId);
+  const selfReferencingRatio = selfReferencing.length / Math.max(1, feedback.length);
+  
+  const sybilScore = selfReferencingRatio * 100;
+  
+  // Graduated discount per spec
+  if (sybilScore <= 10) return 1.00;
+  if (sybilScore <= 30) return 0.95;
+  if (sybilScore <= 50) return 0.85;
+  if (sybilScore <= 70) return 0.70;
+  if (sybilScore <= 90) return 0.50;
+  return 0.20;
+}
+
+// STEP 5: Compute consistency bonus
+function computeConsistencyBonus(feedback: Feedback[], baseScore: number, trend: string): number {
+  if (feedback.length < 3) return 1.0;
+  
+  let sumSquaredDiff = 0;
+  let weightSum = 0;
+  const now = Date.now();
+  
+  for (const fb of feedback) {
+    const daysSince = (now - (fb.blockTimestamp instanceof Date ? fb.blockTimestamp.getTime() : new Date(fb.blockTimestamp).getTime())) / (1000 * 60 * 60 * 24);
+    const weight = Math.exp(-TEMPORAL_DECAY_LAMBDA * daysSince);
+    sumSquaredDiff += weight * Math.pow(fb.score - baseScore, 2);
+    weightSum += weight;
+  }
+  
+  const weightedStdDev = Math.sqrt(sumSquaredDiff / weightSum);
+  
+  // Override for improving agents
+  if (trend === 'improving' && weightedStdDev > 15) return 1.0;
+  
+  if (weightedStdDev <= 5) return 1.05;
+  if (weightedStdDev <= 10) return 1.02;
+  if (weightedStdDev <= 15) return 1.00;
+  if (weightedStdDev <= 25) return 0.98;
+  return 0.95;
+}
+
+// STEP 6: Compute final contextual score
+function computeContextualScore(
+  domainScore: number,
+  complexityAdjustment: number,
+  sybilDiscount: number,
+  consistencyBonus: number
+): number {
+  const finalScore = domainScore * complexityAdjustment * sybilDiscount * consistencyBonus;
+  return Math.max(0, Math.min(100, finalScore));
+}
+
+// STEP 7: Compute confidence interval
+function computeConfidenceInterval(
+  feedbackCount: number,
+  uniqueCounterparties: number,
+  contextualScore: number
+): { lower: number; upper: number; level: string } {
+  if (feedbackCount === 0) {
+    return { lower: 10, upper: 90, level: 'very_low' };
+  }
+  
+  const diversityFactor = uniqueCounterparties / feedbackCount;
+  const nEff = feedbackCount * diversityFactor;
+  const halfWidth = Math.max(MINIMUM_HALF_WIDTH, CONFIDENCE_K / Math.sqrt(1 + nEff));
+  
+  const lower = Math.max(0, contextualScore - halfWidth);
+  const upper = Math.min(100, contextualScore + halfWidth);
+  
+  let level: string;
+  if (halfWidth > 25) level = 'very_low';
+  else if (halfWidth > 15) level = 'low';
+  else if (halfWidth > 8) level = 'medium';
+  else if (halfWidth > 3) level = 'high';
+  else level = 'very_high';
+  
+  return { lower, upper, level };
+}
+
+// Determine trend from temporal analysis
+function determineTrend(feedback: Feedback[]): string {
+  if (feedback.length < 5) return 'insufficient_data';
+  
+  const now = Date.now();
+  const last30Days = feedback.filter(fb => {
+    const daysSince = (now - (fb.blockTimestamp instanceof Date ? fb.blockTimestamp.getTime() : new Date(fb.blockTimestamp).getTime())) / (1000 * 60 * 60 * 24);
+    return daysSince <= 30;
+  });
+  
+  const last90Days = feedback.filter(fb => {
+    const daysSince = (now - (fb.blockTimestamp instanceof Date ? fb.blockTimestamp.getTime() : new Date(fb.blockTimestamp).getTime())) / (1000 * 60 * 60 * 24);
+    return daysSince <= 90;
+  });
+  
+  if (last30Days.length < 3) return 'insufficient_data';
+  
+  const score30 = computeBaseScore(last30Days);
+  const score90 = computeBaseScore(last90Days);
+  const scoreAll = computeBaseScore(feedback);
+  
+  if (score30 > score90 + 5) return 'improving';
+  if (score30 < score90 - 5) return 'declining';
+  
+  // Check volatility
+  const stdDev = Math.sqrt(
+    feedback.reduce((sum, fb) => sum + Math.pow(fb.score - scoreAll, 2), 0) / feedback.length
+  );
+  
+  if (stdDev > 20) return 'volatile';
+  return 'stable';
+}
+
+// Main scoring function
+export async function computeTrustScore(request: ScoreRequest): Promise<ScoreResponse> {
+  const { agentId, taskType, complexity } = request;
+  
+  // Fetch all non-revoked feedback for agent
+  const feedbackRows = await query<Feedback>(
+    `SELECT * FROM feedback 
+     WHERE agent_id = $1 AND is_revoked = false 
+     ORDER BY block_timestamp DESC`,
+    [agentId]
+  );
+  
+  if (feedbackRows.length === 0) {
+    // Zero feedback case
+    return {
+      agentId,
+      timestamp: new Date().toISOString(),
+      overallTrustScore: 50.0,
+      confidenceInterval: { lower: 10, upper: 90 },
+      confidenceLevel: 'very_low',
+      contextualScore: 50.0,
+      contextualConfidence: { lower: 10, upper: 90 },
+      contextNote: 'No feedback available. Neutral prior score assigned.',
+      dimensions: {
+        reliability: null,
+        quality: null,
+        speed: null,
+        consistency: null,
+        domain_expertise: {},
+      },
+      sybilAssessment: {
+        risk: 'negligible',
+        score: 0,
+        flags: [],
+        graphAnalysis: 'Insufficient data for sybil analysis',
+      },
+      temporalAnalysis: {
+        trend: 'insufficient_data',
+        last30Days: 50,
+        last90Days: 50,
+        allTime: 50,
+        volatility: 'low',
+      },
+      dataQuality: {
+        feedbackCount: 0,
+        uniqueCounterparties: 0,
+        oldestFeedback: new Date().toISOString(),
+        newestFeedback: new Date().toISOString(),
+        feedbackDensity: 'low',
+      },
+      scoringModelVersion: '1.0.0-testnet',
+    };
+  }
+  
+  // Execute scoring algorithm
+  const baseScore = computeBaseScore(feedbackRows);
+  const domainScore = computeDomainScore(feedbackRows, taskType);
+  const complexityAdj = computeComplexityAdjustment(feedbackRows, complexity);
+  const sybilDiscount = computeSybilDiscount(feedbackRows, agentId);
+  const trend = determineTrend(feedbackRows);
+  const consistencyBonus = computeConsistencyBonus(feedbackRows, baseScore, trend);
+  const contextualScore = computeContextualScore(domainScore, complexityAdj, sybilDiscount, consistencyBonus);
+  
+  const uniqueCounterparties = new Set(feedbackRows.map(fb => fb.clientAddress)).size;
+  const confidence = computeConfidenceInterval(feedbackRows.length, uniqueCounterparties, contextualScore);
+  
+  // Temporal analysis
+  const now = Date.now();
+  const last30 = feedbackRows.filter(fb => (now - (fb.blockTimestamp instanceof Date ? fb.blockTimestamp.getTime() : new Date(fb.blockTimestamp).getTime())) <= 30 * 24 * 60 * 60 * 1000);
+  const last90 = feedbackRows.filter(fb => (now - (fb.blockTimestamp instanceof Date ? fb.blockTimestamp.getTime() : new Date(fb.blockTimestamp).getTime())) <= 90 * 24 * 60 * 60 * 1000);
+  
+  return {
+    agentId,
+    timestamp: new Date().toISOString(),
+    overallTrustScore: baseScore,
+    confidenceInterval: { lower: confidence.lower, upper: confidence.upper },
+    confidenceLevel: confidence.level as any,
+    contextualScore,
+    contextualConfidence: { lower: confidence.lower, upper: confidence.upper },
+    contextNote: taskType 
+      ? `Scored for ${taskType} with ${feedbackRows.length} feedback records`
+      : `Overall score based on ${feedbackRows.length} feedback records`,
+    dimensions: {
+      reliability: null, // Would need tagged feedback
+      quality: null,
+      speed: null,
+      consistency: (consistencyBonus - 0.95) / 0.10 * 20 + 40, // Map to 0-100
+      domain_expertise: {}, // Would need domain analysis
+    },
+    sybilAssessment: {
+      risk: sybilDiscount < 0.9 ? 'low' : 'negligible',
+      score: (1 - sybilDiscount) * 100,
+      flags: sybilDiscount < 1.0 ? ['self-referencing-detected'] : [],
+      graphAnalysis: `Analyzed ${uniqueCounterparties} unique counterparties`,
+    },
+    temporalAnalysis: {
+      trend: trend as any,
+      last30Days: last30.length > 0 ? computeBaseScore(last30) : baseScore,
+      last90Days: last90.length > 0 ? computeBaseScore(last90) : baseScore,
+      allTime: baseScore,
+      volatility: Math.sqrt(
+        feedbackRows.reduce((sum, fb) => sum + Math.pow(fb.score - baseScore, 2), 0) / feedbackRows.length
+      ) > 15 ? 'high' : 'low',
+    },
+    dataQuality: {
+      feedbackCount: feedbackRows.length,
+      uniqueCounterparties,
+      oldestFeedback: feedbackRows[feedbackRows.length - 1]?.blockTimestamp ? (feedbackRows[feedbackRows.length - 1].blockTimestamp instanceof Date ? feedbackRows[feedbackRows.length - 1].blockTimestamp.toISOString() : new Date(feedbackRows[feedbackRows.length - 1].blockTimestamp).toISOString()) : new Date().toISOString() || new Date().toISOString(),
+      newestFeedback: feedbackRows[0]?.blockTimestamp.toISOString() || new Date().toISOString(),
+      feedbackDensity: feedbackRows.length >= 20 ? 'high' : feedbackRows.length >= 10 ? 'medium' : 'low',
+    },
+    scoringModelVersion: '1.0.0-testnet',
+  };
+}
