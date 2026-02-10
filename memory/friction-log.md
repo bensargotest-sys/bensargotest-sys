@@ -63,3 +63,15 @@ _(Friction that became tools)_
 ---
 
 **Next Review:** Weekly (check for 3+ occurrences of same pattern)
+
+### 2026-02-10 - QMD Installation Failed
+- **Friction:** QMD tool installation via Bun doesn't work
+- **Attempts:**
+  1. `bun install -g qmd` → installed placeholder package (0.0.0, no binary)
+  2. Searched for binary in ~/.bun → not found
+  3. Removed placeholder package
+- **Root Cause:** "qmd" npm package is placeholder, not the actual workspace search tool
+- **Workaround:** Use grep/find for now
+- **Tool Needed:** Research correct QMD installation method OR alternative workspace search tool
+- **Status:** Lower priority (grep works, just slower)
+- **Next:** Research actual QMD source/docs when time permits

@@ -10,5 +10,17 @@
     "blocked_at": "2026-02-10T01:26:02.870459Z",
     "resolved_at": null,
     "resolution": null
+  },
+  {
+    "id": 2,
+    "task": "Check Formspree for TSP signups",
+    "blocker": "Requires Formspree login credentials (https://formspree.io/forms/xwpklgqa)",
+    "category": "general",
+    "context": null,
+    "priority": "medium",
+    "status": "blocked",
+    "blocked_at": "2026-02-10T12:26:58.552473Z",
+    "resolved_at": null,
+    "resolution": null
   }
 ]

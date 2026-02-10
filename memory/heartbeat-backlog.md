@@ -37,7 +37,7 @@ Pick based on available time: ⚡5min | 🔧15min | 📝30min | 🔬60min
 - [ ] ⚡ Review ENFORCEMENT.md for clarity
 
 ### Quality & Learning
-- [ ] ⚡ Scan friction-log for 3+ occurrences
+- [x] ⚡ Scan friction-log for 3+ occurrences
 - [ ] 🔧 Review recent mistakes for promotable patterns
 - [ ] 📝 Write session handoff for today's work
 - [ ] ⚡ Update MEMORY.md with TSP insights
