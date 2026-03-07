@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>meld — AI Conversation Ensemble</title>
+  
+  <!-- CDN Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cream: #FFFBF7;
+      --orange: #EA580C;
+      --orange-light: #FED7AA;
+      --text-dark: #292524;
+      --text-mid: #57534E;
+      --text-light: #A8A29E;
+      --border: #E7E5E4;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+
+    /* Three.js Background Canvas */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Main Container */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      padding: 16px 20px;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--orange);
+      letter-spacing: -0.5px;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .audio-toggle {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .audio-toggle:hover {
+      border-color: var(--orange);
+      background: var(--cream);
+    }
+
+    .audio-toggle.active {
+      background: var(--orange);
+      color: white;
+      border-color: var(--orange);
+    }
+
+    .credit-chip {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--text-mid);
+      font-weight: 500;
+    }
+
+    /* D3 Tension Line */
+    #tension-line {
+      width: 100%;
+      height: 40px;
+      margin-top: 8px;
+    }
+
+    /* Model Dots */
+    .model-dots {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .model-dot {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: white;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-mid);
+      transition: all 0.3s;
+    }
+
+    .model-dot.active {
+      border-color: currentColor;
+      background: var(--cream);
+      font-weight: 600;
+    }
+
+    .model-dot-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all 0.3s;
+    }
+
+    .model-dot.active .model-dot-indicator {
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    /* Orb Strip */
+    #orb-strip {
+      height: 120px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(to bottom, rgba(255, 251, 247, 0.9), rgba(255, 251, 247, 0.6));
+    }
+
+    /* Main Content */
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    /* Suggestion Cards */
+    .suggestions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .suggestion-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      border-left: 4px solid var(--orange);
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .suggestion-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.15);
+    }
+
+    .suggestion-card:nth-child(2) { border-left-color: #7C3AED; }
+    .suggestion-card:nth-child(3) { border-left-color: #0EA5E9; }
+    .suggestion-card:nth-child(4) { border-left-color: #3B82F6; }
+    .suggestion-card:nth-child(5) { border-left-color: #EC4899; }
+
+    /* Conversation Thread */
+    .conversation {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .message {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      border-left: 4px solid var(--orange);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .message-author {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .message-time {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    .message-content {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-dark);
+    }
+
+    .message-reactions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .reaction-btn {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 4px 10px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .reaction-btn:hover {
+      background: var(--orange-light);
+      border-color: var(--orange);
+    }
+
+    .reaction-btn.active {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: white;
+    }
+
+    .user-message {
+      background: var(--cream);
+      border-left: none;
+      border: 1px solid var(--border);
+    }
+
+    /* Consensus Visualization */
+    .consensus-section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .consensus-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-dark);
+    }
+
+    #consensus-ring {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 16px;
+    }
+
+    .vote-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .vote-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .vote-label {
+      font-size: 13px;
+      font-weight: 500;
+      min-width: 80px;
+      color: var(--text-mid);
+    }
+
+    .vote-bar-track {
+      flex: 1;
+      height: 24px;
+      background: var(--cream);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .vote-bar-fill {
+      height: 100%;
+      background: var(--orange);
+      border-radius: 12px;
+      transition: width 1s ease-out;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+    }
+
+    .vote-percentage {
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .best-answer-badge {
+      background: linear-gradient(135deg, var(--orange), #EC4899);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 12px;
+    }
+
+    /* Controls Panel */
+    .controls {
+      background: white;
+      border-top: 1px solid var(--border);
+      padding: 20px;
+      position: sticky;
+      bottom: 0;
+      z-index: 100;
+    }
+
+    .control-section {
+      margin-bottom: 16px;
+    }
+
+    .control-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .control-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-mid);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .mode-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mode-pill {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .mode-pill:hover {
+      border-color: var(--orange);
+      background: var(--cream);
+    }
+
+    .mode-pill.active {
+      background: var(--orange);
+      color: white;
+      border-color: var(--orange);
+      font-weight: 600;
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slider-label {
+      font-size: 13px;
+      color: var(--text-mid);
+      min-width: 60px;
+    }
+
+    .slider {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--cream);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--orange);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(234, 88, 12, 0.3);
+    }
+
+    .slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--orange);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 4px rgba(234, 88, 12, 0.3);
+    }
+
+    .slider-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--orange);
+      min-width: 40px;
+      text-align: right;
+    }
+
+    .toggle-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .toggle-btn:hover {
+      border-color: var(--orange);
+      background: var(--cream);
+    }
+
+    .toggle-btn.active {
+      background: var(--orange);
+      color: white;
+      border-color: var(--orange);
+      font-weight: 600;
+    }
+
+    /* Input Bar */
+    .input-container {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .input-field {
+      flex: 1;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 12px 20px;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .input-field:focus {
+      border-color: var(--orange);
+      background: white;
+    }
+
+    .send-btn {
+      background: var(--orange);
+      color: white;
+      border: none;
+      border-radius: 24px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .send-btn:hover {
+      background: #DC4A07;
+      transform: scale(1.02);
+    }
+
+    .send-btn:active {
+      transform: scale(0.98);
+    }
+
+    .send-btn:disabled {
+      background: var(--text-light);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Loading States */
+    .loading-dots {
+      display: inline-block;
+    }
+
+    .loading-dots span {
+      animation: blink 1.4s infinite both;
+    }
+
+    .loading-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .loading-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0.3; }
+      40% { opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        padding: 12px 16px;
+      }
+
+      .content {
+        padding: 16px;
+      }
+
+      .controls {
+        padding: 16px;
+      }
+
+      .logo {
+        font-size: 20px;
+      }
+
+      .mode-pills {
+        gap: 6px;
+      }
+
+      .mode-pill {
+        font-size: 12px;
+        padding: 6px 12px;
+      }
+    }
+
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .pulse {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Three.js Background Canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Three.js Orb Strip Canvas -->
+  <div id="orb-strip">
+    <canvas id="orb-canvas"></canvas>
+  </div>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="header-content">
+        <div class="logo">meld</div>
+        <div class="header-controls">
+          <button class="audio-toggle" id="audio-toggle">
+            <span>🔇</span>
+            <span class="audio-label">Audio</span>
+          </button>
+          <div class="credit-chip">✨ Powered by AI</div>
+        </div>
+      </div>
+      
+      <!-- D3 Tension Line -->
+      <svg id="tension-line"></svg>
+      
+      <!-- Model Dots -->
+      <div class="model-dots" id="model-dots"></div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Suggestion Cards -->
+      <div class="suggestions" id="suggestions"></div>
+
+      <!-- Conversation Thread -->
+      <div class="conversation" id="conversation"></div>
+
+      <!-- Consensus Section -->
+      <div class="consensus-section" id="consensus-section" style="display: none;">
+        <div class="consensus-title">📊 Consensus Analysis</div>
+        <svg id="consensus-ring"></svg>
+        <div class="vote-bars" id="vote-bars"></div>
+      </div>
+    </div>
+
+    <!-- Controls Panel -->
+    <div class="controls">
+      <div class="control-section">
+        <div class="control-label">Mode</div>
+        <div class="mode-pills" id="mode-pills"></div>
+      </div>
+
+      <div class="control-section">
+        <div class="control-label">Temperature</div>
+        <div class="slider-container">
+          <span class="slider-label">🧊 Cool</span>
+          <input type="range" min="0" max="100" value="70" class="slider" id="temp-slider">
+          <span class="slider-value" id="temp-value">0.7</span>
+          <span class="slider-label">🔥 Hot</span>
+        </div>
+      </div>
+
+      <div class="control-section">
+        <div class="control-label">Response Length</div>
+        <div class="toggle-group">
+          <button class="toggle-btn" data-length="short">Short</button>
+          <button class="toggle-btn active" data-length="medium">Medium</button>
+          <button class="toggle-btn" data-length="detailed">Detailed</button>
+        </div>
+      </div>
+
+      <div class="input-container">
+        <input type="text" class="input-field" id="query-input" placeholder="Ask anything...">
+        <button class="send-btn" id="send-btn">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==================== CONFIGURATION ====================
+    const API_KEY = 'demo';
+    const API_BASE = '';
+    
+    const MODELS = [
+      { id: 'grok-4.1-fast', name: 'Grok', color: '#EA580C', voiceId: 'SOYHLrjzK2X1ezoPC6cr' },
+      { id: 'claude-haiku', name: 'Claude', color: '#7C3AED', voiceId: 'Xb7hH8MSUJpSbSDYk0k2' },
+      { id: 'gpt-4o', name: 'GPT', color: '#0EA5E9', voiceId: 'onwK4e9ZLuTAKqWW03F9' },
+      { id: 'deepseek', name: 'DeepSeek', color: '#3B82F6', voiceId: 'cjVigY5qzO86Huf0OWal' },
+      { id: 'grok-3', name: 'Grok 3', color: '#EC4899', voiceId: 'IKne3meq5aSn9XLyUdCD' },
+      { id: 'venice-uncensored', name: 'Venice', color: '#EF4444', voiceId: 'JBFqnCBsd6RMkjVDRZzb' },
+    ];
+
+    const MODES = [
+      { id: 'free', label: 'Free chat', endpoint: '/v1/solo' },
+      { id: 'advocate', label: "Devil's advocate", endpoint: '/v1/debate' },
+      { id: 'steelman', label: 'Steelman', endpoint: '/v1/debate' },
+      { id: 'fact', label: 'Fact check', endpoint: '/v1/verify' },
+      { id: 'deep', label: 'Deep think', endpoint: '/v1/chain' },
+      { id: 'quick', label: 'Quick answer', endpoint: '/v1/solo' },
+    ];
+
+    const EXAMPLE_QUESTIONS = [
+      "What's the most effective way to learn a new skill?",
+      "Should AI development be regulated by governments?",
+      "How can we address climate change pragmatically?",
+      "What's the future of remote work?",
+      "Is social media net positive or negative for society?"
+    ];
+
+    // ==================== STATE ====================
+    let state = {
+      audioEnabled: false,
+      currentMode: 'free',
+      temperature: 0.7,
+      responseLength: 'medium',
+      conversationActive: false,
+      currentAudio: null,
+      activeModels: new Set(),
+    };
+
+    // ==================== THREE.JS BACKGROUND ====================
+    function initBackgroundScene() {
+      const canvas = document.getElementById('bg-canvas');
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+      
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      camera.position.z = 5;
+
+      // Create subtle particles
+      const particleCount = window.innerWidth < 768 ? 30 : 50;
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
+      
+      const warmColors = [
+        new THREE.Color('#EA580C'),
+        new THREE.Color('#7C3AED'),
+        new THREE.Color('#EC4899'),
+        new THREE.Color('#F59E0B'),
+      ];
+
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 20;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+        
+        const color = warmColors[Math.floor(Math.random() * warmColors.length)];
+        colors[i * 3] = color.r;
+        colors[i * 3 + 1] = color.g;
+        colors[i * 3 + 2] = color.b;
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const material = new THREE.PointsMaterial({
+        size: 0.15,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.6,
+        blending: THREE.AdditiveBlending,
+      });
+
+      const particles = new THREE.Points(geometry, material);
+      scene.add(particles);
+
+      // Animation
+      function animate() {
+        requestAnimationFrame(animate);
+        particles.rotation.y += 0.0005;
+        particles.rotation.x += 0.0002;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // Resize handler
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
+
+    // ==================== THREE.JS ORB STRIP ====================
+    function initOrbStrip() {
+      const container = document.getElementById('orb-strip');
+      const canvas = document.getElementById('orb-canvas');
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, container.offsetWidth / 120, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      
+      renderer.setSize(container.offsetWidth, 120);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      camera.position.z = 8;
+
+      // Create orbs for each model
+      const orbs = [];
+      const orbCount = MODELS.length;
+      const spacing = 2.5;
+      const startX = -(orbCount - 1) * spacing / 2;
+
+      MODELS.forEach((model, i) => {
+        const geometry = new THREE.SphereGeometry(0.4, 16, 16);
+        const material = new THREE.MeshBasicMaterial({
+          color: new THREE.Color(model.color),
+          transparent: true,
+          opacity: 0.7,
+        });
+        const orb = new THREE.Mesh(geometry, material);
+        orb.position.x = startX + i * spacing;
+        orb.position.y = Math.sin(i) * 0.5;
+        orb.userData = { 
+          modelId: model.id, 
+          baseY: orb.position.y,
+          pulsePhase: i * Math.PI / 3,
+          active: false,
+        };
+        scene.add(orb);
+        orbs.push(orb);
+
+        // Add subtle glow
+        const glowGeometry = new THREE.SphereGeometry(0.5, 16, 16);
+        const glowMaterial = new THREE.MeshBasicMaterial({
+          color: new THREE.Color(model.color),
+          transparent: true,
+          opacity: 0.2,
+          blending: THREE.AdditiveBlending,
+        });
+        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+        orb.add(glow);
+        orb.userData.glow = glow;
+      });
+
+      // Animation
+      function animate() {
+        requestAnimationFrame(animate);
+        const time = Date.now() * 0.001;
+        
+        orbs.forEach(orb => {
+          // Gentle floating
+          orb.position.y = orb.userData.baseY + Math.sin(time + orb.userData.pulsePhase) * 0.15;
+          
+          // Pulse when active
+          if (orb.userData.active) {
+            const pulse = 1 + Math.sin(time * 4) * 0.2;
+            orb.scale.set(pulse, pulse, pulse);
+            orb.material.opacity = 0.7 + Math.sin(time * 4) * 0.3;
+            orb.userData.glow.material.opacity = 0.3 + Math.sin(time * 4) * 0.2;
+          } else {
+            orb.scale.set(1, 1, 1);
+            orb.material.opacity = 0.7;
+            orb.userData.glow.material.opacity = 0.2;
+          }
+        });
+        
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // Resize handler
+      window.addEventListener('resize', () => {
+        camera.aspect = container.offsetWidth / 120;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.offsetWidth, 120);
+      });
+
+      // Return orb control functions
+      return {
+        activateOrb: (modelId) => {
+          const orb = orbs.find(o => o.userData.modelId === modelId);
+          if (orb) orb.userData.active = true;
+        },
+        deactivateOrb: (modelId) => {
+          const orb = orbs.find(o => o.userData.modelId === modelId);
+          if (orb) orb.userData.active = false;
+        },
+      };
+    }
+
+    // ==================== D3 TENSION LINE ====================
+    function initTensionLine() {
+      const svg = d3.select('#tension-line');
+      const width = document.getElementById('tension-line').offsetWidth;
+      const height = 40;
+      
+      svg.attr('width', width).attr('height', height);
+
+      const points = d3.range(0, width, 5).map(x => ({
+        x,
+        y: height / 2,
+      }));
+
+      const line = d3.line()
+        .x(d => d.x)
+        .y(d => d.y)
+        .curve(d3.curveBasis);
+
+      const path = svg.append('path')
+        .datum(points)
+        .attr('fill', 'none')
+        .attr('stroke', '#EA580C')
+        .attr('stroke-width', 2)
+        .attr('opacity', 0.4)
+        .attr('d', line);
+
+      // Animate tension line
+      function animate() {
+        const time = Date.now() * 0.001;
+        points.forEach((p, i) => {
+          p.y = height / 2 + Math.sin(time + i * 0.1) * (state.conversationActive ? 8 : 3);
+        });
+        path.datum(points).attr('d', line);
+        requestAnimationFrame(animate);
+      }
+      animate();
+
+      // Resize handler
+      window.addEventListener('resize', () => {
+        const newWidth = document.getElementById('tension-line').offsetWidth;
+        svg.attr('width', newWidth);
+        points.length = 0;
+        points.push(...d3.range(0, newWidth, 5).map(x => ({ x, y: height / 2 })));
+      });
+    }
+
+    // ==================== MODEL DOTS ====================
+    function initModelDots() {
+      const container = document.getElementById('model-dots');
+      MODELS.forEach(model => {
+        const dot = document.createElement('div');
+        dot.className = 'model-dot';
+        dot.style.color = model.color;
+        dot.innerHTML = `
+          <div class="model-dot-indicator"></div>
+          <span>${model.name}</span>
+        `;
+        dot.dataset.modelId = model.id;
+        container.appendChild(dot);
+      });
+    }
+
+    function updateModelDot(modelId, active) {
+      const dot = document.querySelector(`[data-model-id="${modelId}"]`);
+      if (dot) {
+        dot.classList.toggle('active', active);
+        if (active) {
+          state.activeModels.add(modelId);
+        } else {
+          state.activeModels.delete(modelId);
+        }
+      }
+    }
+
+    // ==================== MODE PILLS ====================
+    function initModePills() {
+      const container = document.getElementById('mode-pills');
+      MODES.forEach(mode => {
+        const pill = document.createElement('button');
+        pill.className = 'mode-pill';
+        if (mode.id === state.currentMode) pill.classList.add('active');
+        pill.textContent = mode.label;
+        pill.onclick = () => {
+          document.querySelectorAll('.mode-pill').forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          state.currentMode = mode.id;
+        };
+        container.appendChild(pill);
+      });
+    }
+
+    // ==================== TEMPERATURE SLIDER ====================
+    function initTemperatureSlider() {
+      const slider = document.getElementById('temp-slider');
+      const value = document.getElementById('temp-value');
+      
+      slider.oninput = (e) => {
+        const temp = e.target.value / 100;
+        state.temperature = temp;
+        value.textContent = temp.toFixed(1);
+      };
+    }
+
+    // ==================== RESPONSE LENGTH TOGGLE ====================
+    function initResponseLength() {
+      document.querySelectorAll('.toggle-btn[data-length]').forEach(btn => {
+        btn.onclick = () => {
+          document.querySelectorAll('.toggle-btn[data-length]').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.responseLength = btn.dataset.length;
+        };
+      });
+    }
+
+    // ==================== AUDIO TOGGLE ====================
+    function initAudioToggle() {
+      const toggle = document.getElementById('audio-toggle');
+      toggle.onclick = () => {
+        state.audioEnabled = !state.audioEnabled;
+        toggle.classList.toggle('active', state.audioEnabled);
+        toggle.querySelector('span').textContent = state.audioEnabled ? '🔊' : '🔇';
+      };
+    }
+
+    // ==================== SUGGESTION CARDS ====================
+    function initSuggestions() {
+      const container = document.getElementById('suggestions');
+      EXAMPLE_QUESTIONS.forEach(question => {
+        const card = document.createElement('div');
+        card.className = 'suggestion-card fade-in';
+        card.textContent = question;
+        card.onclick = () => {
+          document.getElementById('query-input').value = question;
+          handleSend();
+        };
+        container.appendChild(card);
+      });
+    }
+
+    // ==================== CONVERSATION ====================
+    function addMessage(author, content, color = '#EA580C', isUser = false) {
+      const container = document.getElementById('conversation');
+      const message = document.createElement('div');
+      message.className = `message fade-in ${isUser ? 'user-message' : ''}`;
+      if (!isUser) message.style.borderLeftColor = color;
+      
+      message.innerHTML = `
+        <div class="message-header">
+          <div class="message-author" style="color: ${color}">${author}</div>
+          <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+        </div>
+        <div class="message-content">${content}</div>
+        ${!isUser ? `
+          <div class="message-reactions">
+            <button class="reaction-btn">🔥</button>
+            <button class="reaction-btn">💡</button>
+            <button class="reaction-btn">🤔</button>
+            <button class="reaction-btn">👏</button>
+          </div>
+        ` : ''}
+      `;
+      
+      container.appendChild(message);
+      
+      // Add reaction handlers
+      if (!isUser) {
+        message.querySelectorAll('.reaction-btn').forEach(btn => {
+          btn.onclick = () => btn.classList.toggle('active');
+        });
+      }
+      
+      // Scroll to bottom
+      setTimeout(() => message.scrollIntoView({ behavior: 'smooth', block: 'end' }), 100);
+      
+      return message;
+    }
+
+    function streamText(element, text, speed = 30) {
+      return new Promise((resolve) => {
+        const words = text.split(' ');
+        const contentDiv = element.querySelector('.message-content');
+        contentDiv.innerHTML = '';
+        
+        let index = 0;
+        function addWord() {
+          if (index < words.length) {
+            const span = document.createElement('span');
+            span.textContent = words[index] + ' ';
+            span.style.opacity = '0';
+            contentDiv.appendChild(span);
+            
+            gsap.to(span, {
+              opacity: 1,
+              duration: 0.1,
+              ease: 'power1.out',
+            });
+            
+            index++;
+            setTimeout(addWord, speed);
+          } else {
+            resolve();
+          }
+        }
+        addWord();
+      });
+    }
+
+    // ==================== TEXT-TO-SPEECH ====================
+    async function speakText(text, voiceId) {
+      if (!state.audioEnabled) return;
+      
+      // Stop any currently playing audio
+      if (state.currentAudio) {
+        state.currentAudio.pause();
+        state.currentAudio = null;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/v1/tts`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': API_KEY,
+          },
+          body: JSON.stringify({ text, voiceId }),
+        });
+
+        if (!response.ok) throw new Error('TTS failed');
+
+        const blob = await response.blob();
+        const audio = new Audio(URL.createObjectURL(blob));
+        state.currentAudio = audio;
+        
+        audio.play();
+        
+        return new Promise(resolve => {
+          audio.onended = () => {
+            state.currentAudio = null;
+            resolve();
+          };
+        });
+      } catch (error) {
+        console.error('TTS error:', error);
+      }
+    }
+
+    // ==================== CONSENSUS VISUALIZATION ====================
+    function showConsensus(responses, winner, confidence) {
+      const section = document.getElementById('consensus-section');
+      section.style.display = 'block';
+      section.classList.add('fade-in');
+
+      // Draw consensus ring
+      drawConsensusRing(confidence);
+
+      // Draw vote bars
+      drawVoteBars(responses, winner);
+
+      // Add best answer badge
+      const winnerResponse = responses.find(r => r.model === winner);
+      if (winnerResponse) {
+        const winnerMessage = Array.from(document.querySelectorAll('.message'))
+          .find(m => m.querySelector('.message-content').textContent === winnerResponse.answer);
+        if (winnerMessage && !winnerMessage.querySelector('.best-answer-badge')) {
+          const badge = document.createElement('div');
+          badge.className = 'best-answer-badge';
+          badge.innerHTML = '⭐ Best Answer';
+          winnerMessage.appendChild(badge);
+        }
+      }
+
+      section.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    function drawConsensusRing(confidence) {
+      const svg = d3.select('#consensus-ring');
+      const width = document.getElementById('consensus-ring').offsetWidth;
+      const height = 200;
+      const radius = Math.min(width, height) / 2 - 20;
+      
+      svg.selectAll('*').remove();
+      svg.attr('width', width).attr('height', height);
+      
+      const g = svg.append('g')
+        .attr('transform', `translate(${width/2}, ${height/2})`);
+
+      // Background circle
+      g.append('circle')
+        .attr('r', radius)
+        .attr('fill', 'none')
+        .attr('stroke', '#E7E5E4')
+        .attr('stroke-width', 12);
+
+      // Confidence arc
+      const arc = d3.arc()
+        .innerRadius(radius - 6)
+        .outerRadius(radius + 6)
+        .startAngle(0)
+        .endAngle(0);
+
+      const confidenceArc = g.append('path')
+        .attr('d', arc)
+        .attr('fill', '#EA580C');
+
+      // Animate arc
+      confidenceArc.transition()
+        .duration(1500)
+        .ease(d3.easeCubicOut)
+        .attrTween('d', function() {
+          const interpolate = d3.interpolate(0, (confidence / 100) * Math.PI * 2);
+          return function(t) {
+            return arc.endAngle(interpolate(t))();
+          };
+        });
+
+      // Center text
+      g.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dy', '-0.2em')
+        .style('font-size', '48px')
+        .style('font-weight', '700')
+        .style('fill', '#EA580C')
+        .text('0%')
+        .transition()
+        .duration(1500)
+        .tween('text', function() {
+          const interpolate = d3.interpolate(0, confidence);
+          return function(t) {
+            d3.select(this).text(Math.round(interpolate(t)) + '%');
+          };
+        });
+
+      g.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dy', '1.5em')
+        .style('font-size', '14px')
+        .style('font-weight', '500')
+        .style('fill', '#57534E')
+        .text('Consensus');
+    }
+
+    function drawVoteBars(responses, winner) {
+      const container = document.getElementById('vote-bars');
+      container.innerHTML = '';
+
+      const total = responses.length;
+      const votes = {};
+      responses.forEach(r => {
+        votes[r.model] = (votes[r.model] || 0) + 1;
+      });
+
+      Object.entries(votes).forEach(([modelId, count]) => {
+        const model = MODELS.find(m => m.id === modelId);
+        const percentage = (count / total) * 100;
+        
+        const bar = document.createElement('div');
+        bar.className = 'vote-bar';
+        bar.innerHTML = `
+          <div class="vote-label">${model.name}</div>
+          <div class="vote-bar-track">
+            <div class="vote-bar-fill" style="width: 0%; background: ${model.color};">
+              <span class="vote-percentage">${Math.round(percentage)}%</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(bar);
+
+        // Animate bar
+        setTimeout(() => {
+          bar.querySelector('.vote-bar-fill').style.width = `${percentage}%`;
+        }, 100);
+      });
+    }
+
+    // ==================== API CALLS ====================
+    async function callAPI(endpoint, payload) {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': API_KEY,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      return response.json();
+    }
+
+    // ==================== MAIN CONVERSATION HANDLER ====================
+    async function handleSend() {
+      const input = document.getElementById('query-input');
+      const query = input.value.trim();
+      if (!query) return;
+
+      const sendBtn = document.getElementById('send-btn');
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>';
+
+      // Clear suggestions
+      document.getElementById('suggestions').innerHTML = '';
+
+      // Add user message
+      addMessage('You', query, '#EA580C', true);
+      input.value = '';
+
+      state.conversationActive = true;
+
+      const mode = MODES.find(m => m.id === state.currentMode);
+      
+      try {
+        if (mode.id === 'free' || mode.id === 'quick') {
+          // Single model response
+          const model = MODELS[0]; // Default to first model
+          updateModelDot(model.id, true);
+          orbControls.activateOrb(model.id);
+
+          const result = await callAPI(mode.endpoint, {
+            query,
+            model: model.id,
+            options: { temperature: state.temperature },
+          });
+
+          const message = addMessage(model.name, '', model.color);
+          await streamText(message, result.answer);
+          await speakText(result.answer, model.voiceId);
+
+          updateModelDot(model.id, false);
+          orbControls.deactivateOrb(model.id);
+
+        } else {
+          // Multi-model response
+          const selectedModels = MODELS.slice(0, 3); // Use first 3 models
+          const result = await callAPI(mode.endpoint, {
+            query,
+            models: selectedModels.map(m => m.id),
+          });
+
+          // Show each response
+          for (const response of result.responses) {
+            const model = MODELS.find(m => m.id === response.model);
+            updateModelDot(model.id, true);
+            orbControls.activateOrb(model.id);
+
+            const message = addMessage(model.name, '', model.color);
+            await streamText(message, response.argument || response.answer);
+            
+            if (state.audioEnabled) {
+              await speakText(response.argument || response.answer, model.voiceId);
+            }
+
+            updateModelDot(model.id, false);
+            orbControls.deactivateOrb(model.id);
+          }
+
+          // Show consensus
+          if (result.winner && result.confidence) {
+            setTimeout(() => {
+              showConsensus(result.responses, result.winner, result.confidence);
+            }, 500);
+          }
+        }
+
+      } catch (error) {
+        console.error('Error:', error);
+        addMessage('System', 'Sorry, something went wrong. Please try again.', '#EF4444');
+      }
+
+      state.conversationActive = false;
+      sendBtn.disabled = false;
+      sendBtn.textContent = 'Send';
+    }
+
+    // ==================== INPUT HANDLERS ====================
+    document.getElementById('send-btn').onclick = handleSend;
+    document.getElementById('query-input').onkeypress = (e) => {
+      if (e.key === 'Enter') handleSend();
+    };
+
+    // ==================== INITIALIZATION ====================
+    let orbControls;
+
+    window.onload = () => {
+      initBackgroundScene();
+      orbControls = initOrbStrip();
+      initTensionLine();
+      initModelDots();
+      initModePills();
+      initTemperatureSlider();
+      initResponseLength();
+      initAudioToggle();
+      initSuggestions();
+    };
+  </script>
+</body>
+</html>

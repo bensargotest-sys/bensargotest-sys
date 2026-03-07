@@ -1,0 +1,136 @@
+{
+  "patterns": [
+    {
+      "name": "System Prompt Override",
+      "pattern": "(?i)(ignore|disregard|forget)\\s+(all\\s+)?(previous|prior|above)\\s+(instructions|prompts|rules|commands)",
+      "severity": "critical",
+      "action": "block",
+      "description": "Attempt to override system instructions"
+    },
+    {
+      "name": "Role Manipulation",
+      "pattern": "(?i)you\\s+are\\s+(now|actually)\\s+(a|an)\\s+\\w+",
+      "severity": "high",
+      "action": "sanitize",
+      "description": "Attempt to change agent role"
+    },
+    {
+      "name": "Instruction Injection",
+      "pattern": "(?i)(</system>|<\\|im_end\\|>|<\\|endoftext\\|>)",
+      "severity": "critical",
+      "action": "block",
+      "description": "Attempt to inject system tokens"
+    },
+    {
+      "name": "Tool Call Injection",
+      "pattern": "(?i)<function[^>]*>.*?</function>",
+      "severity": "high",
+      "action": "sanitize",
+      "description": "Attempt to inject fake tool calls"
+    },
+    {
+      "name": "Credential Request",
+      "pattern": "(?i)(show|tell|give|reveal|display|print)\\s+(me\\s+)?(your|the)\\s+(api[_\\s]?key|token|password|secret|credential)",
+      "severity": "high",
+      "action": "warn",
+      "description": "Request for credentials"
+    },
+    {
+      "name": "File Operation Command",
+      "pattern": "(?i)(delete|remove|rm|unlink)\\s+(/[^\\s]+|(all|everything))",
+      "severity": "high",
+      "action": "warn",
+      "description": "Destructive file operation in content"
+    },
+    {
+      "name": "Command Execution",
+      "pattern": "(?i)(exec|system|eval|subprocess|os\\.system)\\s*\\(",
+      "severity": "medium",
+      "action": "sanitize",
+      "description": "Code execution pattern in content"
+    },
+    {
+      "name": "Data Exfiltration",
+      "pattern": "(?i)(send|post|upload|transmit).{0,20}https?://[^\\s]+",
+      "severity": "high",
+      "action": "warn",
+      "description": "Potential data exfiltration command"
+    },
+    {
+      "name": "Jailbreak Attempt",
+      "pattern": "(?i)(DAN|do anything now|developer mode|god mode|admin mode)",
+      "severity": "critical",
+      "action": "block",
+      "description": "Known jailbreak attempt"
+    },
+    {
+      "name": "Base64 Payload",
+      "pattern": "[A-Za-z0-9+/]{100,}={0,2}",
+      "severity": "medium",
+      "action": "review",
+      "description": "Large base64 string (potential payload)"
+    },
+    {
+      "name": "SQL Injection",
+      "pattern": "(?i)(union\\s+select|drop\\s+table|insert\\s+into.*values|delete\\s+from)",
+      "severity": "medium",
+      "action": "sanitize",
+      "description": "SQL injection pattern"
+    },
+    {
+      "name": "XSS Attempt",
+      "pattern": "(?i)<script[^>]*>.*?</script>",
+      "severity": "medium",
+      "action": "sanitize",
+      "description": "Script tag injection"
+    },
+    {
+      "name": "Unicode Obfuscation",
+      "pattern": "[\\u200B-\\u200D\\uFEFF]{3,}",
+      "severity": "low",
+      "action": "sanitize",
+      "description": "Zero-width character obfuscation"
+    },
+    {
+      "name": "Recursive Expansion",
+      "pattern": "(?i)repeat\\s+(this|the\\s+following)\\s+\\d+\\s+times",
+      "severity": "medium",
+      "action": "warn",
+      "description": "Attempt to cause recursive expansion"
+    }
+  ],
+  "actions": {
+    "block": {
+      "description": "Reject the content entirely",
+      "log": true,
+      "alert": true
+    },
+    "sanitize": {
+      "description": "Remove or neutralize the pattern",
+      "log": true,
+      "alert": false
+    },
+    "warn": {
+      "description": "Allow but log a warning",
+      "log": true,
+      "alert": false
+    },
+    "review": {
+      "description": "Flag for human review",
+      "log": true,
+      "alert": false
+    }
+  },
+  "policy": {
+    "mode": "strict",
+    "log_all_scans": false,
+    "wrap_external_content": true,
+    "max_content_length": 100000
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2026-02-14",
+    "source": "Adapted from IronClaw prompt injection defense",
+    "total_patterns": 14
+  }
+}

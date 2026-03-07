@@ -1,0 +1,5 @@
+🧪 Calling MELD consensus with 3 models...
+   Prompt: Multi-step: (1) Research top 5 ETH DeFi by TVL. (2) Analyze best risk-adjusted yield for 00K. (3) Give specific allocation with entry/exit. Show all steps.
+
+❌ ERROR: All model requests failed
+{"error":"All model requests failed","details":["OpenAI-compatible error 429: [{\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\n    \"status

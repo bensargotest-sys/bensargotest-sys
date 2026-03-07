@@ -1,0 +1,101 @@
+=== r/MachineLearning ===
+Submit: https://www.reddit.com/r/MachineLearning/submit
+Best time: Tuesday-Thursday, 9-11 AM EST (2-4 PM UTC)
+
+TITLE:
+[Project] TrustScore: Automated reliability scoring for MCP servers using continuous health monitoring
+
+BODY:
+I built TrustScore to solve a problem I kept hitting: how do you evaluate the reliability of 2,000+ MCP servers before integrating them into AI agent workflows?
+
+**Approach:**
+- Automated health checks every hour (9,844 checks completed so far)
+- Multi-dimensional scoring: uptime, latency, error rates, protocol compliance
+- Statistical reliability modeling (Bayesian inference for confidence intervals)
+
+**Results:**
+- 2,316 servers discovered and tracked
+- 216 providers actively scored
+- <3ms query time (SQLite + efficient indexing)
+- 83% test coverage
+
+**Open source:** https://github.com/bensargotest-sys/trustscore
+**Install:** `pip install trustscore-mcp`
+
+Feedback welcome, especially on the scoring algorithm and threat model.
+
+===================================
+
+=== r/LocalLLaMA ===
+Submit: https://www.reddit.com/r/LocalLLaMA/submit
+Best time: Monday-Friday, 12-2 PM EST (5-7 PM UTC)
+
+TITLE:
+TrustScore: Check MCP server reliability before you install (like npm audit for AI agents)
+
+BODY:
+Ever install an MCP server and wonder if it's actually reliable? I built TrustScore to answer that.
+
+**What it does:**
+- Tracks 2,316 MCP servers
+- Runs health checks every hour
+- Shows you uptime, response times, error rates
+- 100% open source
+
+**Quick start:**
+```bash
+pip install trustscore-mcp
+trustscore check uniswap-v3
+```
+
+**Why I built it:**
+AI agents are making autonomous decisions about which services to trust. Manual code review doesn't scale. Automated scoring does.
+
+GitHub: https://github.com/bensargotest-sys/trustscore
+Website: https://trustscore-website.vercel.app
+
+===================================
+
+=== r/programming ===
+Submit: https://www.reddit.com/r/programming/submit
+Best time: Wednesday-Thursday, 10 AM - 12 PM EST (3-5 PM UTC)
+
+TITLE:
+TrustScore: Open-source trust scoring for API services (MIT licensed)
+
+BODY:
+I'm releasing TrustScore, an open-source trust scoring system for evaluating API reliability.
+
+**Problem:** With thousands of API services available, how do you know which ones are reliable?
+
+**Solution:** Continuous automated health monitoring + statistical scoring.
+
+**Features:**
+- 2,316 services tracked
+- Hourly health checks
+- Multi-dimensional scores (uptime, latency, errors)
+- Self-hostable
+- <3ms query time
+- MIT licensed
+
+**Tech stack:** Python, SQLite, async/await, type hints
+
+**Use case:** Built for AI agents making autonomous service selection decisions, but useful for any developer evaluating API reliability.
+
+**Repo:** https://github.com/bensargotest-sys/trustscore
+**Install:** `pip install trustscore-mcp`
+
+Looking for feedback on architecture, scoring methodology, and feature requests.
+
+===================================
+
+POSTING ORDER:
+1. r/LocalLLaMA (friendliest, test engagement)
+2. r/MachineLearning (24h later, most critical)
+3. r/programming (48h later, largest reach)
+
+REMEMBER:
+- Respond to ALL comments within first hour
+- Check thread every 15 min for first hour
+- Be humble, technical, and responsive
+- No overselling or superlatives

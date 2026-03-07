@@ -1,0 +1,157 @@
+# OpenClaw Configuration Template for Claude Opus 4.6
+# To be integrated into main OpenClaw config
+
+# Model Configuration
+models:
+  claude-opus-4-6:
+    provider: anthropic
+    model: claude-opus-4-6
+    context_window: 200000  # TBD - check Anthropic docs
+    cost_per_1m_input_tokens: 15.0  # TBD - verify latest pricing
+    cost_per_1m_output_tokens: 75.0  # TBD - verify latest pricing
+    capabilities:
+      - complex-reasoning
+      - code-generation
+      - multi-step-analysis
+      - research-synthesis
+    recommended_for:
+      - Multi-step problem solving
+      - Complex code implementation
+      - Research and analysis requiring deep reasoning
+      - Tasks requiring exceptional quality
+    
+  claude-sonnet-4-5:
+    provider: anthropic
+    model: claude-sonnet-4-5
+    context_window: 200000
+    cost_per_1m_input_tokens: 3.0
+    cost_per_1m_output_tokens: 15.0
+    capabilities:
+      - general-purpose
+      - coding
+      - analysis
+      - synthesis
+    recommended_for:
+      - Standard complex tasks
+      - Most agent operations
+      - Default choice for quality/cost balance
+
+  claude-sonnet-3-5:
+    provider: anthropic
+    model: claude-sonnet-3-5
+    context_window: 200000
+    cost_per_1m_input_tokens: 3.0
+    cost_per_1m_output_tokens: 15.0
+    capabilities:
+      - general-purpose
+      - coding
+      - documentation
+    recommended_for:
+      - Legacy compatibility
+      - Documentation tasks
+      - Non-critical operations
+
+  claude-haiku-3-5:
+    provider: anthropic
+    model: claude-haiku-3-5
+    context_window: 200000
+    cost_per_1m_input_tokens: 0.8
+    cost_per_1m_output_tokens: 4.0
+    capabilities:
+      - fast-response
+      - simple-tasks
+      - lookups
+    recommended_for:
+      - Simple queries
+      - Status checks
+      - Quick lookups
+      - Formatting tasks
+
+# Routing Configuration
+routing:
+  enabled: true
+  default_model: claude-sonnet-4-5
+  
+  # Tier-based routing
+  tiers:
+    tier1:
+      name: "Ultra-Complex"
+      models: [claude-opus-4-6]
+      triggers:
+        - keyword: ["implement complex", "multi-step reasoning", "research synthesis"]
+        - estimated_tokens: ">50000"
+        - complexity_score: ">0.9"
+      
+    tier2:
+      name: "Complex"
+      models: [claude-sonnet-4-5]
+      triggers:
+        - keyword: ["implement", "analyze", "design", "synthesis"]
+        - estimated_tokens: ">10000"
+        - complexity_score: ">0.7"
+      
+    tier3:
+      name: "Medium"
+      models: [claude-sonnet-3-5]
+      triggers:
+        - keyword: ["document", "explain", "summarize"]
+        - estimated_tokens: ">5000"
+        - complexity_score: ">0.5"
+      
+    tier4:
+      name: "Simple"
+      models: [claude-haiku-3-5]
+      triggers:
+        - keyword: ["check", "status", "list", "show"]
+        - estimated_tokens: "<5000"
+        - complexity_score: "<0.5"
+      
+    tier5:
+      name: "Trivial"
+      models: [claude-haiku-3]
+      triggers:
+        - keyword: ["yes", "no", "confirm"]
+        - estimated_tokens: "<1000"
+        - complexity_score: "<0.3"
+  
+  # Manual overrides
+  manual_triggers:
+    opus_keywords:
+      - "use opus"
+      - "complex reasoning required"
+      - "maximum quality"
+    haiku_keywords:
+      - "use haiku"
+      - "quick check"
+      - "simple task"
+  
+  # Cost controls
+  cost_limits:
+    daily_max: 10.0  # $10/day max
+    per_call_max: 1.0  # $1/call max
+    alert_threshold: 0.5  # Alert at $0.50/call
+  
+  # Logging
+  logging:
+    enabled: true
+    log_all_decisions: true
+    log_outcomes: true
+    log_file: "/data/.openclaw/workspace/memory/routing-decisions.jsonl"
+
+# Agent Defaults
+agent_defaults:
+  main:
+    default_model: claude-sonnet-4-5
+    enable_routing: true
+    thinking_mode: low
+  
+  subagent:
+    default_model: claude-sonnet-4-5
+    enable_routing: true
+    thinking_mode: low
+
+# Notes:
+# - All costs in USD
+# - Token counts per million (1M tokens)
+# - Complexity scores range 0.0-1.0
+# - This is a template - actual values to be determined from research

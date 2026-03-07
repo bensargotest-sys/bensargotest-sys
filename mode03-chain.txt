@@ -1,0 +1,5 @@
+🧪 Calling MELD consensus with 3 models...
+   Prompt: Design a token vesting schedule for a Web3 startup. Draft it, then refine it, then finalize it. Show all three sequential improvement steps.
+
+❌ ERROR: All model requests failed
+{"error":"All model requests failed","details":["OpenAI-compatible error 429: [{\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.\",\n    \"status

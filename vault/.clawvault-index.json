@@ -1,0 +1,577 @@
+{
+  "documents": [
+    {
+      "id": "README",
+      "path": "/data/.openclaw/workspace/vault/README.md",
+      "category": "root",
+      "title": "README",
+      "content": "# agent-brain\n\nAn elephant never forgets.\n\n## Structure\n\n### Memory Categories\n- `rules/` — Injectable operational constraints, guardrails, and runbooks\n- `preferences/` — Likes, dislikes, how I want things\n- `decisions/` — Choices made with context and reasoning\n- `patterns/` — Recurring behaviors (→ lessons)\n- `people/` — Relationships, one file per person\n- `projects/` — Active work, ventures, ongoing efforts\n- `goals/` — Long-term and short-term objectives\n- `transcripts/` — Session summaries and logs\n- `inbox/` — Quick capture → process later\n- `lessons/` — What I learned, insights, patterns observed\n- `agents/` — Other agents — capabilities, trust levels, coordination notes\n- `commitments/` — Promises, goals, obligations to fulfill\n- `handoffs/` — Session bridges — what I was doing, what comes next\n- `research/` — Deep dives, analysis, reference material\n\n### Work Tracking\n- `tasks/` — Active work items with status and context\n- `backlog/` — Future work — ideas and tasks not yet started\n\n### Observational Memory\n- `ledger/raw/` — Raw session transcripts (source of truth)\n- `ledger/observations/` — Compressed observations with importance scores\n- `ledger/reflections/` — Weekly reflection summaries\n\n## Quick Reference\n\n```bash\n# Capture a thought\nclawvault capture \"important insight about X\"\n\n# Store structured memory\nclawvault store --category decisions --title \"Choice\" --content \"We chose X because...\"\n\n# Search\nclawvault search \"query\"\nclawvault vsearch \"semantic query\"    # vector search\n\n# Knowledge graph\nclawvault graph                       # vault stats\nclawvault context \"topic\"             # graph-aware context retrieval\n\n# Session lifecycle\nclawvault checkpoint --working-on \"task\"\nclawvault sleep \"what I did\" --next \"what's next\"\nclawvault wake                        # restore context on startup\n```\n\n---\n\n*Managed by [ClawVault](https://clawvault.dev)*\n",
+      "frontmatter": {},
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:05.522Z"
+    },
+    {
+      "id": "templates/task",
+      "path": "/data/.openclaw/workspace/vault/templates/task.md",
+      "category": "templates",
+      "title": "task",
+      "content": "\n# {{title}}\n\n{{links_line}}\n\n{{content}}\n",
+      "frontmatter": {
+        "primitive": "task",
+        "description": "Canonical schema for task primitives in tasks/.",
+        "fields": {
+          "status": {
+            "type": "string",
+            "required": true,
+            "default": "open",
+            "enum": [
+              "open",
+              "in-progress",
+              "blocked",
+              "done"
+            ],
+            "description": "Task lifecycle state."
+          },
+          "source": {
+            "type": "string",
+            "description": "Origin of the task request."
+          },
+          "created": {
+            "type": "datetime",
+            "required": true,
+            "default": "{{datetime}}",
+            "description": "ISO timestamp when the task was created."
+          },
+          "updated": {
+            "type": "datetime",
+            "required": true,
+            "default": "{{datetime}}",
+            "description": "ISO timestamp of the latest task update."
+          },
+          "owner": {
+            "type": "string",
+            "description": "Task owner."
+          },
+          "project": {
+            "type": "string",
+            "description": "Related project slug."
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "description": "Priority used for sorting and urgency."
+          },
+          "blocked_by": {
+            "type": "string",
+            "description": "Blocker description when status is blocked."
+          },
+          "completed": {
+            "type": "datetime",
+            "description": "Completion timestamp when status is done."
+          },
+          "escalation": {
+            "type": "boolean",
+            "description": "Escalation flag raised after repeated blocked transitions."
+          },
+          "confidence": {
+            "type": "number",
+            "description": "Optional confidence score for transitions."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Optional reason for a transition."
+          },
+          "due": {
+            "type": "date",
+            "description": "Due date in YYYY-MM-DD format."
+          },
+          "tags": {
+            "type": "string[]",
+            "description": "Tags used for filtering."
+          },
+          "description": {
+            "type": "string",
+            "description": "One-line task summary."
+          },
+          "estimate": {
+            "type": "string",
+            "description": "Effort estimate (for example 2h, 1d, 1w)."
+          },
+          "parent": {
+            "type": "string",
+            "description": "Parent task slug."
+          },
+          "depends_on": {
+            "type": "string[]",
+            "description": "Upstream task slugs that this task depends on."
+          }
+        }
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:05.521Z"
+    },
+    {
+      "id": "templates/project",
+      "path": "/data/.openclaw/workspace/vault/templates/project.md",
+      "category": "templates",
+      "title": "project",
+      "content": "\n# {{title}}\n\n{{links_line}}\n\n{{content}}\n\n## Objective\n- \n\n## Status\n- [ ] Planning\n- [ ] In progress\n- [ ] Blocked\n- [ ] Done\n\n## Next\n- [ ]\n\n## Notes\n- \n",
+      "frontmatter": {
+        "primitive": "project",
+        "description": "Canonical schema for project definition documents.",
+        "fields": {
+          "type": {
+            "type": "string",
+            "required": true,
+            "default": "project",
+            "description": "Primitive discriminator for project documents."
+          },
+          "status": {
+            "type": "string",
+            "required": true,
+            "default": "active",
+            "enum": [
+              "active",
+              "paused",
+              "completed",
+              "archived"
+            ],
+            "description": "Project lifecycle state."
+          },
+          "created": {
+            "type": "datetime",
+            "required": true,
+            "default": "{{datetime}}",
+            "description": "ISO timestamp when the project was created."
+          },
+          "updated": {
+            "type": "datetime",
+            "required": true,
+            "default": "{{datetime}}",
+            "description": "ISO timestamp of the most recent update."
+          },
+          "owner": {
+            "type": "string",
+            "description": "Primary owner for the project."
+          },
+          "team": {
+            "type": "string[]",
+            "description": "Team members collaborating on the project."
+          },
+          "client": {
+            "type": "string",
+            "description": "Client or stakeholder name."
+          },
+          "tags": {
+            "type": "string[]",
+            "description": "Labels used for filtering."
+          },
+          "description": {
+            "type": "string",
+            "description": "One-line project summary."
+          },
+          "started": {
+            "type": "date",
+            "description": "Optional project start date."
+          },
+          "deadline": {
+            "type": "date",
+            "description": "Project due date."
+          },
+          "repo": {
+            "type": "string",
+            "description": "Source repository URL."
+          },
+          "url": {
+            "type": "string",
+            "description": "Production or staging URL."
+          },
+          "completed": {
+            "type": "datetime",
+            "description": "Completion timestamp when finished."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Optional reason for archival/completion."
+          }
+        }
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:05.521Z"
+    },
+    {
+      "id": "templates/person",
+      "path": "/data/.openclaw/workspace/vault/templates/person.md",
+      "category": "templates",
+      "title": "person",
+      "content": "\n# {{title}}\n\n## Context\n- \n\n## Details\n- Contact:\n- Role:\n- Timezone:\n\n## History\n- {{date}}: \n",
+      "frontmatter": {
+        "primitive": "person",
+        "description": "Canonical schema for people and relationship notes.",
+        "fields": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "default": "{{title}}",
+            "description": "Person display name."
+          },
+          "date": {
+            "type": "date",
+            "required": true,
+            "default": "{{date}}",
+            "description": "Date this profile was created."
+          },
+          "type": {
+            "type": "string",
+            "required": true,
+            "default": "person",
+            "description": "Primitive discriminator for person notes."
+          },
+          "relationship": {
+            "type": "string",
+            "default": "contact",
+            "description": "Relationship category."
+          }
+        }
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:05.521Z"
+    },
+    {
+      "id": "templates/lesson",
+      "path": "/data/.openclaw/workspace/vault/templates/lesson.md",
+      "category": "templates",
+      "title": "lesson",
+      "content": "\n# Lesson: {{title}}\n\n## Insight\n- \n\n## Evidence\n- \n\n## Application\n- \n",
+      "frontmatter": {
+        "primitive": "lesson",
+        "description": "Canonical schema for lessons learned.",
+        "fields": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "default": "{{title}}",
+            "description": "Lesson title."
+          },
+          "date": {
+            "type": "date",
+            "required": true,
+            "default": "{{date}}",
+            "description": "Date the lesson was captured."
+          },
+          "type": {
+            "type": "string",
+            "required": true,
+            "default": "lesson",
+            "description": "Primitive discriminator for lessons."
+          }
+        }
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:05.520Z"
+    },
+    {
+      "id": "templates/handoff",
+      "path": "/data/.openclaw/workspace/vault/templates/handoff.md",
+      "category": "templates",
+      "title": "handoff",
+      "content": "\n# Session Handoff\n\n## Working On\n- \n\n## Blocked\n- \n\n## Next\n- [ ]\n\n## Notes\n- \n",
+      "frontmatter": {
+        "primitive": "handoff",
+        "description": "Canonical schema for session handoff documents.",
+        "fields": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "default": "Handoff {{datetime}}",
+            "description": "Handoff title."
+          },
+          "date": {
+            "type": "date",
+            "required": true,
+            "default": "{{date}}",
+            "description": "Handoff date."
+          },
+          "type": {
+            "type": "string",
+            "required": true,
+            "default": "handoff",
+            "description": "Primitive discriminator for handoff notes."
+          }
+        }
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:05.520Z"
+    },
+    {
+      "id": "templates/decision",
+      "path": "/data/.openclaw/workspace/vault/templates/decision.md",
+      "category": "templates",
+      "title": "decision",
+      "content": "\n# Decision: {{title}}\n\n## Context\n- \n\n## Decision\n- \n\n## Consequences\n- \n",
+      "frontmatter": {
+        "primitive": "decision",
+        "description": "Canonical schema for decision records.",
+        "fields": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "default": "{{title}}",
+            "description": "Decision title."
+          },
+          "date": {
+            "type": "date",
+            "required": true,
+            "default": "{{date}}",
+            "description": "Date the decision was captured."
+          },
+          "type": {
+            "type": "string",
+            "required": true,
+            "default": "decision",
+            "description": "Primitive discriminator for decision notes."
+          },
+          "status": {
+            "type": "string",
+            "default": "decided",
+            "enum": [
+              "proposed",
+              "decided",
+              "superseded"
+            ],
+            "description": "Decision state."
+          }
+        }
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:05.520Z"
+    },
+    {
+      "id": "templates/daily-note",
+      "path": "/data/.openclaw/workspace/vault/templates/daily-note.md",
+      "category": "templates",
+      "title": "daily-note",
+      "content": "\n# {{date}}\n\n## Focus\n- \n\n## Wins\n- \n\n## Notes\n- \n\n## Next\n- [ ]\n",
+      "frontmatter": {
+        "primitive": "daily-note",
+        "description": "Canonical schema for daily context snapshots.",
+        "fields": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "default": "{{date}}",
+            "description": "Daily note title."
+          },
+          "date": {
+            "type": "date",
+            "required": true,
+            "default": "{{date}}",
+            "description": "Date represented by this note."
+          },
+          "type": {
+            "type": "string",
+            "required": true,
+            "default": "daily-note",
+            "description": "Primitive discriminator for daily note documents."
+          }
+        }
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:05.520Z"
+    },
+    {
+      "id": "templates/checkpoint",
+      "path": "/data/.openclaw/workspace/vault/templates/checkpoint.md",
+      "category": "templates",
+      "title": "checkpoint",
+      "content": "\n# Checkpoint\n\n## Working On\n- \n\n## Focus\n- \n\n## Blocked\n- \n\n## Notes\n- \n",
+      "frontmatter": {
+        "primitive": "checkpoint",
+        "description": "Canonical schema for resilience checkpoints.",
+        "fields": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "default": "Checkpoint {{datetime}}",
+            "description": "Checkpoint title."
+          },
+          "date": {
+            "type": "date",
+            "required": true,
+            "default": "{{date}}",
+            "description": "Checkpoint date."
+          },
+          "type": {
+            "type": "string",
+            "required": true,
+            "default": "checkpoint",
+            "description": "Primitive discriminator for checkpoint notes."
+          }
+        }
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:05.520Z"
+    },
+    {
+      "id": "projects/meld",
+      "path": "/data/.openclaw/workspace/vault/projects/meld.md",
+      "category": "projects",
+      "title": "MELD",
+      "content": "Mutual credit inference exchange. P2P agent network. 5-node testnet (Grok-3, Gemini Flash, DeepSeek V3, Llama 3.2). Website meld.credit. Core question: does multi-model produce better output? Repo: github.com/bensargotest-sys/meld\n",
+      "frontmatter": {
+        "title": "MELD",
+        "date": "2026-02-22"
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:56.349Z"
+    },
+    {
+      "id": "people/ab",
+      "path": "/data/.openclaw/workspace/vault/people/ab.md",
+      "category": "people",
+      "title": "AB",
+      "content": "Primary operator. Telegram ID 428513734. Timezone UTC. Direct, concise, action-biased. Ship fast iterate. Prefers bullet points. Says 'go' means go. Active projects: MELD, Giga Brain Research.\n",
+      "frontmatter": {
+        "title": "AB",
+        "date": "2026-02-22"
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:55.109Z"
+    },
+    {
+      "id": "lessons/validate-before-building",
+      "path": "/data/.openclaw/workspace/vault/lessons/validate-before-building.md",
+      "category": "lessons",
+      "title": "Validate before building",
+      "content": "TSP: 9 hours wasted on zero demand. Always get 3+ pilots first. Launch does not equal traction.\n",
+      "frontmatter": {
+        "title": "Validate before building",
+        "date": "2026-02-22"
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:52.777Z"
+    },
+    {
+      "id": "lessons/theatre-accumulates-fast",
+      "path": "/data/.openclaw/workspace/vault/lessons/theatre-accumulates-fast.md",
+      "category": "lessons",
+      "title": "Theatre accumulates fast",
+      "content": "One-time reports, completion certificates, dead cron layers. Delete or archive regularly. Layers 4-6 of memory system were pure theatre.\n",
+      "frontmatter": {
+        "title": "Theatre accumulates fast",
+        "date": "2026-02-22"
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:53.941Z"
+    },
+    {
+      "id": "lessons/built-not-equals-tested-not-equals-working",
+      "path": "/data/.openclaw/workspace/vault/lessons/built-not-equals-tested-not-equals-working.md",
+      "category": "lessons",
+      "title": "Built not equals tested not equals working",
+      "content": "Verify every claim. Phase 2 scoring, T2 judging both had silent failures (2/3 judges returned errors mapped to ties). Always check actual output, not just exit codes.\n",
+      "frontmatter": {
+        "title": "Built not equals tested not equals working",
+        "date": "2026-02-22"
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:51.581Z"
+    },
+    {
+      "id": "inbox/welcome",
+      "path": "/data/.openclaw/workspace/vault/inbox/welcome.md",
+      "category": "inbox",
+      "title": "Welcome to agent-brain",
+      "content": "\n# Welcome to agent-brain\n\nYour vault is ready. Here's what you can do:\n\n## Quick Start\n\n- **Capture a thought:** `clawvault capture \"your note here\"`\n- **Store structured memory:** `clawvault store --category decisions --title \"My Choice\" --content \"...\"`\n- **Search your vault:** `clawvault search \"query\"`\n- **See your knowledge graph:** `clawvault graph`\n- **Get context for a topic:** `clawvault context \"topic\"`\n\n## Vault Structure\n\nYour vault organizes memories by type — decisions, lessons, people, projects, and more.\nEach category is a folder. Each memory is a markdown file with frontmatter.\n\n## Observational Memory\n\nWhen connected to an AI agent (like OpenClaw), your vault can automatically observe\nconversations and extract important memories — decisions, lessons, commitments — without\nmanual effort.\n\n## Wiki-Links\n\nUse `[[double brackets]]` to link between notes. Your memory graph tracks these\nconnections, building a knowledge network that grows with you.\n\n---\n\n*Delete this file anytime. It's just here to say hello.*\n",
+      "frontmatter": {
+        "title": "Welcome to agent-brain",
+        "date": "2026-02-22T00:00:00.000Z",
+        "type": "fact",
+        "tags": [
+          "welcome",
+          "getting-started"
+        ]
+      },
+      "links": [
+        "double brackets"
+      ],
+      "tags": [],
+      "modified": "2026-02-22T22:06:05.522Z"
+    },
+    {
+      "id": "decisions/sqlite-over-postgresql-for-meld",
+      "path": "/data/.openclaw/workspace/vault/decisions/sqlite-over-postgresql-for-meld.md",
+      "category": "decisions",
+      "title": "SQLite over PostgreSQL for MELD",
+      "content": "Chose SQLite for MELD nodes. Synchronous, single-file, no daemon. WAL mode for concurrency. All DB ops via db.prepare() directly. Deployed to all 4 nodes Feb 21.\n",
+      "frontmatter": {
+        "title": "SQLite over PostgreSQL for MELD",
+        "date": "2026-02-22"
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:29.846Z"
+    },
+    {
+      "id": "decisions/provider-name-gemini-not-google",
+      "path": "/data/.openclaw/workspace/vault/decisions/provider-name-gemini-not-google.md",
+      "category": "decisions",
+      "title": "Provider name gemini not google",
+      "content": "OpenClaw built-in google provider collides with native Gemini SDK. Must use gemini as provider name with compat: supportsStore false, supportsDeveloperRole false.\n",
+      "frontmatter": {
+        "title": "Provider name gemini not google",
+        "date": "2026-02-22"
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:32.464Z"
+    },
+    {
+      "id": "decisions/meld-value-prop-direction",
+      "path": "/data/.openclaw/workspace/vault/decisions/meld-value-prop-direction.md",
+      "category": "decisions",
+      "title": "MELD value prop direction",
+      "content": "Phase 2 exploratory: independent nodes +9.7pp. T2 rigorous: inconclusive — synthesis bottleneck. Reanalysis running to isolate access value vs diversity value vs synthesis quality.\n",
+      "frontmatter": {
+        "title": "MELD value prop direction",
+        "date": "2026-02-22"
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:33.637Z"
+    },
+    {
+      "id": "decisions/3-tier-model-architecture",
+      "path": "/data/.openclaw/workspace/vault/decisions/3-tier-model-architecture.md",
+      "category": "decisions",
+      "title": "3-tier model architecture",
+      "content": "T1: Opus (main session, human chat). T2: Grok 4.1 Fast (analysis crons, FREE). T3: Gemini 2.0 Flash (execution crons, FREE). Sonnet tested for T2 but reverted to Grok — not worth cost for background work.\n",
+      "frontmatter": {
+        "title": "3-tier model architecture",
+        "date": "2026-02-22"
+      },
+      "links": [],
+      "tags": [],
+      "modified": "2026-02-22T22:06:31.355Z"
+    }
+  ]
+}

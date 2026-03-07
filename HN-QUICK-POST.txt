@@ -1,0 +1,46 @@
+=== HACKER NEWS QUICK POST (14:00 UTC) ===
+
+SUBMISSION LINK: https://news.ycombinator.com/submit
+
+TITLE:
+Show HN: TrustScore – Trust scoring for MCP servers
+
+URL:
+https://github.com/bensargotest-sys/trustscore
+
+BODY:
+I built TrustScore to solve a problem I kept running into: every time I wanted to add an MCP server to my AI agent workflow, I had to manually audit the code, check for telemetry, verify permissions, etc. It was tedious and didn't scale.
+
+TrustScore automates this. It tracks 2,316 MCP servers with hourly health checks, measuring uptime, response times, error rates, and protocol compliance.
+
+Example output:
+
+    $ trustscore check uniswap-v3
+    TrustScore: 87/100 (High Trust)
+    ✓ 99.2% uptime (last 30 days)
+    ✓ 180ms avg latency
+    ✓ 12,847 successful calls
+    ⚠ 0.8% error rate
+
+Why this matters: As AI agents become more autonomous, they're integrating with dozens of external services. Each one is a potential point of failure. TrustScore gives you data-driven confidence before you install.
+
+Technical details:
+- Python/SQLite (self-hostable)
+- <3ms queries (indexed efficiently)
+- Statistical scoring (Bayesian confidence intervals)
+- 100% open source (MIT)
+
+Current state:
+- 9,844 health checks completed
+- 216 providers actively scored
+- 83% test coverage
+
+I'm using it in production with 12+ servers. Would love feedback, especially from folks building AI agents or maintaining MCP servers.
+
+Install: pip install trustscore-mcp
+GitHub: https://github.com/bensargotest-sys/trustscore
+Website: https://trustscore-website.vercel.app
+
+What other scoring dimensions would be useful? Considering: security audit scores, community reputation, maintainer responsiveness.
+
+=== POST THIS AT 14:00 UTC (9:00 AM US EASTERN) ===

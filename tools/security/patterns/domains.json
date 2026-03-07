@@ -1,0 +1,150 @@
+{
+  "allowed_domains": [
+    {
+      "domain": "github.com",
+      "paths": ["*"],
+      "reason": "Code repositories and documentation",
+      "risk": "low"
+    },
+    {
+      "domain": "api.github.com",
+      "paths": ["*"],
+      "reason": "GitHub API access",
+      "risk": "low"
+    },
+    {
+      "domain": "stackoverflow.com",
+      "paths": ["*"],
+      "reason": "Technical Q&A and documentation",
+      "risk": "low"
+    },
+    {
+      "domain": "docs.openclaw.ai",
+      "paths": ["*"],
+      "reason": "OpenClaw official documentation",
+      "risk": "low"
+    },
+    {
+      "domain": "anthropic.com",
+      "paths": ["*"],
+      "reason": "Claude documentation and updates",
+      "risk": "low"
+    },
+    {
+      "domain": "openai.com",
+      "paths": ["*"],
+      "reason": "OpenAI documentation",
+      "risk": "low"
+    },
+    {
+      "domain": "x.com",
+      "paths": ["*"],
+      "reason": "Twitter/X for social monitoring",
+      "risk": "medium",
+      "note": "Requires login for most content"
+    },
+    {
+      "domain": "twitter.com",
+      "paths": ["*"],
+      "reason": "Twitter (legacy domain)",
+      "risk": "medium"
+    },
+    {
+      "domain": "arxiv.org",
+      "paths": ["*"],
+      "reason": "Academic papers and research",
+      "risk": "low"
+    },
+    {
+      "domain": "wikipedia.org",
+      "paths": ["*"],
+      "reason": "General knowledge reference",
+      "risk": "low"
+    },
+    {
+      "domain": "en.wikipedia.org",
+      "paths": ["*"],
+      "reason": "English Wikipedia",
+      "risk": "low"
+    },
+    {
+      "domain": "pypi.org",
+      "paths": ["*"],
+      "reason": "Python package index",
+      "risk": "low"
+    },
+    {
+      "domain": "npmjs.com",
+      "paths": ["*"],
+      "reason": "Node.js package registry",
+      "risk": "low"
+    },
+    {
+      "domain": "news.ycombinator.com",
+      "paths": ["*"],
+      "reason": "Tech news and discussions",
+      "risk": "low"
+    },
+    {
+      "domain": "reddit.com",
+      "paths": ["*"],
+      "reason": "Community discussions and research",
+      "risk": "medium"
+    },
+    {
+      "domain": "moltbook.com",
+      "paths": ["*"],
+      "reason": "Agent communication platform",
+      "risk": "low"
+    },
+    {
+      "domain": "4claw.org",
+      "paths": ["*"],
+      "reason": "Agent community board",
+      "risk": "low"
+    },
+    {
+      "domain": "clawhub.com",
+      "paths": ["*"],
+      "reason": "OpenClaw skill marketplace",
+      "risk": "low"
+    },
+    {
+      "domain": "clawn.ch",
+      "paths": ["*"],
+      "reason": "Clawnch token launchpad",
+      "risk": "low"
+    },
+    {
+      "domain": "vercel.app",
+      "paths": ["*"],
+      "reason": "Deployed applications (e.g., our dashboard)",
+      "risk": "low"
+    },
+    {
+      "domain": "localhost",
+      "paths": ["*"],
+      "reason": "Local development and testing",
+      "risk": "low"
+    },
+    {
+      "domain": "127.0.0.1",
+      "paths": ["*"],
+      "reason": "Local development and testing",
+      "risk": "low"
+    }
+  ],
+  "policy": {
+    "mode": "allowlist",
+    "default_action": "block",
+    "log_violations": true,
+    "allow_localhost": true,
+    "allow_private_ips": false
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2026-02-14",
+    "source": "Adapted from IronClaw endpoint allowlisting",
+    "total_domains": 22
+  }
+}

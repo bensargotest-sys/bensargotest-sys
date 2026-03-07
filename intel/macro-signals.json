@@ -1,0 +1,14 @@
+{
+  "verdict": "CRITICAL RISK: US-Israel-Iran war Day 9+ sustains energy/supply volatility; new escalations in Lebanon/Dubai/Abu Dhabi; macro econ rate-limited, AI/tech: Netflix acquires AI film tools company, Pentagon labels Anthropic national security risk, China BCI advances.",
+  "signals": {
+    "bitcoin_price": "$64k prior (war volatility ongoing)",
+    "geopolitical_driver": "Day 9+: Lebanon peacekeeper hits, Israel Beirut/Tehran strikes, Iran Abu Dhabi US base strike, Dubai drone skyscraper hit, Europe retaliation warning (France24/NYT/Reuters/Daily Mail/Guardian)",
+    "trade_policy": "Trump tariffs + war disruptions",
+    "gold_price": "$5300+/oz safe-haven rally sustained",
+    "oil_price": "Sustained high on ME risks, new Gulf/Abu Dhabi strikes",
+    "equities": "Kospi -12% prior, energy/supply risks dominant",
+    "shipping": "Maersk pauses ME-Asia/Europe (ongoing); seafarer strikes Greece over Gulf strandings",
+    "ai_tech": "Netflix acquires InterPositive (AI film tools, Reuters 19h); Pentagon declares Anthropic national security risk (NBC 19h); China BCI practical use in 3-5yrs (Reuters 11h)"
+  },
+  "lastUpdated": "2026-03-07T21:25:00Z"
+}

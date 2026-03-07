@@ -1,0 +1,39 @@
+name: workspace-health
+description: Basic workspace health checks
+
+checks:
+  - name: AGENTS.md exists
+    type: file_exists
+    path: /data/.openclaw/workspace/AGENTS.md
+
+  - name: SOUL.md exists
+    type: file_exists
+    path: /data/.openclaw/workspace/SOUL.md
+
+  - name: MEMORY.md exists
+    type: file_exists
+    path: /data/.openclaw/workspace/MEMORY.md
+
+  - name: memory directory has files
+    type: command
+    command: "test $(ls /data/.openclaw/workspace/memory/*.md 2>/dev/null | wc -l) -gt 0"
+
+  - name: tools directory has files
+    type: command
+    command: "test $(ls /data/.openclaw/workspace/tools/*.py 2>/dev/null | wc -l) -gt 0"
+
+  - name: intel directory exists
+    type: file_exists
+    path: /data/.openclaw/workspace/intel
+
+  - name: cron-log database exists
+    type: file_exists
+    path: /data/.openclaw/workspace/data/cron-log.db
+
+  - name: partner scorecard exists
+    type: file_exists
+    path: /data/.openclaw/workspace/memory/partner-scorecard.json
+
+  - name: observations.md exists
+    type: file_exists
+    path: /data/.openclaw/workspace/memory/observations.md

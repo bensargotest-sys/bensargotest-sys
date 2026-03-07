@@ -1,0 +1,692 @@
+{
+  "schemaVersion": 1,
+  "vaultPath": "/data/.openclaw/workspace/vault",
+  "generatedAt": "2026-02-22T22:07:49.935Z",
+  "files": {
+    "decisions/3-tier-model-architecture.md": {
+      "relativePath": "decisions/3-tier-model-architecture.md",
+      "mtimeMs": 1771797991354.7524,
+      "nodes": [
+        {
+          "id": "note:decisions/3-tier-model-architecture",
+          "title": "3-tier model architecture",
+          "type": "decision",
+          "category": "decision",
+          "path": "decisions/3-tier-model-architecture.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:31.354Z"
+        }
+      ],
+      "edges": []
+    },
+    "decisions/meld-value-prop-direction.md": {
+      "relativePath": "decisions/meld-value-prop-direction.md",
+      "mtimeMs": 1771797993636.7483,
+      "nodes": [
+        {
+          "id": "note:decisions/meld-value-prop-direction",
+          "title": "MELD value prop direction",
+          "type": "decision",
+          "category": "decision",
+          "path": "decisions/meld-value-prop-direction.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:33.636Z"
+        }
+      ],
+      "edges": []
+    },
+    "decisions/provider-name-gemini-not-google.md": {
+      "relativePath": "decisions/provider-name-gemini-not-google.md",
+      "mtimeMs": 1771797992463.7505,
+      "nodes": [
+        {
+          "id": "note:decisions/provider-name-gemini-not-google",
+          "title": "Provider name gemini not google",
+          "type": "decision",
+          "category": "decision",
+          "path": "decisions/provider-name-gemini-not-google.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:32.463Z"
+        }
+      ],
+      "edges": []
+    },
+    "decisions/sqlite-over-postgresql-for-meld.md": {
+      "relativePath": "decisions/sqlite-over-postgresql-for-meld.md",
+      "mtimeMs": 1771797989845.7551,
+      "nodes": [
+        {
+          "id": "note:decisions/sqlite-over-postgresql-for-meld",
+          "title": "SQLite over PostgreSQL for MELD",
+          "type": "decision",
+          "category": "decision",
+          "path": "decisions/sqlite-over-postgresql-for-meld.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:29.845Z"
+        }
+      ],
+      "edges": []
+    },
+    "inbox/welcome.md": {
+      "relativePath": "inbox/welcome.md",
+      "mtimeMs": 1771797965521.799,
+      "nodes": [
+        {
+          "id": "note:inbox/welcome",
+          "title": "Welcome to agent-brain",
+          "type": "note",
+          "category": "note",
+          "path": "inbox/welcome.md",
+          "tags": [
+            "getting-started",
+            "welcome"
+          ],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:05.521Z"
+        },
+        {
+          "id": "tag:getting-started",
+          "title": "#getting-started",
+          "type": "tag",
+          "category": "tag",
+          "path": null,
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": null
+        },
+        {
+          "id": "tag:welcome",
+          "title": "#welcome",
+          "type": "tag",
+          "category": "tag",
+          "path": null,
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": null
+        },
+        {
+          "id": "unresolved:double-brackets",
+          "title": "Double Brackets",
+          "type": "unresolved",
+          "category": "unresolved",
+          "path": null,
+          "tags": [],
+          "missing": true,
+          "degree": 0,
+          "modifiedAt": null
+        }
+      ],
+      "edges": [
+        {
+          "id": "tag:note:inbox/welcome->tag:getting-started",
+          "source": "note:inbox/welcome",
+          "target": "tag:getting-started",
+          "type": "tag"
+        },
+        {
+          "id": "tag:note:inbox/welcome->tag:welcome",
+          "source": "note:inbox/welcome",
+          "target": "tag:welcome",
+          "type": "tag"
+        },
+        {
+          "id": "wiki_link:note:inbox/welcome->unresolved:double-brackets",
+          "source": "note:inbox/welcome",
+          "target": "unresolved:double-brackets",
+          "type": "wiki_link"
+        }
+      ]
+    },
+    "lessons/built-not-equals-tested-not-equals-working.md": {
+      "relativePath": "lessons/built-not-equals-tested-not-equals-working.md",
+      "mtimeMs": 1771798011580.716,
+      "nodes": [
+        {
+          "id": "note:lessons/built-not-equals-tested-not-equals-working",
+          "title": "Built not equals tested not equals working",
+          "type": "lesson",
+          "category": "lesson",
+          "path": "lessons/built-not-equals-tested-not-equals-working.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:51.580Z"
+        }
+      ],
+      "edges": []
+    },
+    "lessons/theatre-accumulates-fast.md": {
+      "relativePath": "lessons/theatre-accumulates-fast.md",
+      "mtimeMs": 1771798013940.7117,
+      "nodes": [
+        {
+          "id": "note:lessons/theatre-accumulates-fast",
+          "title": "Theatre accumulates fast",
+          "type": "lesson",
+          "category": "lesson",
+          "path": "lessons/theatre-accumulates-fast.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:53.940Z"
+        }
+      ],
+      "edges": []
+    },
+    "lessons/validate-before-building.md": {
+      "relativePath": "lessons/validate-before-building.md",
+      "mtimeMs": 1771798012776.7139,
+      "nodes": [
+        {
+          "id": "note:lessons/validate-before-building",
+          "title": "Validate before building",
+          "type": "lesson",
+          "category": "lesson",
+          "path": "lessons/validate-before-building.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:52.776Z"
+        }
+      ],
+      "edges": []
+    },
+    "people/ab.md": {
+      "relativePath": "people/ab.md",
+      "mtimeMs": 1771798015108.7097,
+      "nodes": [
+        {
+          "id": "note:people/ab",
+          "title": "AB",
+          "type": "person",
+          "category": "person",
+          "path": "people/ab.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:55.108Z"
+        }
+      ],
+      "edges": []
+    },
+    "projects/meld.md": {
+      "relativePath": "projects/meld.md",
+      "mtimeMs": 1771798016348.7073,
+      "nodes": [
+        {
+          "id": "note:projects/meld",
+          "title": "MELD",
+          "type": "project",
+          "category": "project",
+          "path": "projects/meld.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:56.348Z"
+        }
+      ],
+      "edges": []
+    },
+    "README.md": {
+      "relativePath": "README.md",
+      "mtimeMs": 1771797965521.799,
+      "nodes": [
+        {
+          "id": "note:README",
+          "title": "README",
+          "type": "note",
+          "category": "note",
+          "path": "README.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:05.521Z"
+        }
+      ],
+      "edges": []
+    },
+    "templates/checkpoint.md": {
+      "relativePath": "templates/checkpoint.md",
+      "mtimeMs": 1771797965519.799,
+      "nodes": [
+        {
+          "id": "note:templates/checkpoint",
+          "title": "Checkpoint",
+          "type": "note",
+          "category": "note",
+          "path": "templates/checkpoint.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:05.519Z"
+        }
+      ],
+      "edges": []
+    },
+    "templates/daily-note.md": {
+      "relativePath": "templates/daily-note.md",
+      "mtimeMs": 1771797965519.799,
+      "nodes": [
+        {
+          "id": "note:templates/daily-note",
+          "title": "Daily Note",
+          "type": "note",
+          "category": "note",
+          "path": "templates/daily-note.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:05.519Z"
+        }
+      ],
+      "edges": []
+    },
+    "templates/decision.md": {
+      "relativePath": "templates/decision.md",
+      "mtimeMs": 1771797965519.799,
+      "nodes": [
+        {
+          "id": "note:templates/decision",
+          "title": "Decision",
+          "type": "note",
+          "category": "note",
+          "path": "templates/decision.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:05.519Z"
+        }
+      ],
+      "edges": []
+    },
+    "templates/handoff.md": {
+      "relativePath": "templates/handoff.md",
+      "mtimeMs": 1771797965519.799,
+      "nodes": [
+        {
+          "id": "note:templates/handoff",
+          "title": "Handoff",
+          "type": "note",
+          "category": "note",
+          "path": "templates/handoff.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:05.519Z"
+        }
+      ],
+      "edges": []
+    },
+    "templates/lesson.md": {
+      "relativePath": "templates/lesson.md",
+      "mtimeMs": 1771797965519.799,
+      "nodes": [
+        {
+          "id": "note:templates/lesson",
+          "title": "Lesson",
+          "type": "note",
+          "category": "note",
+          "path": "templates/lesson.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:05.519Z"
+        }
+      ],
+      "edges": []
+    },
+    "templates/person.md": {
+      "relativePath": "templates/person.md",
+      "mtimeMs": 1771797965520.799,
+      "nodes": [
+        {
+          "id": "note:templates/person",
+          "title": "Person",
+          "type": "note",
+          "category": "note",
+          "path": "templates/person.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:05.520Z"
+        }
+      ],
+      "edges": []
+    },
+    "templates/project.md": {
+      "relativePath": "templates/project.md",
+      "mtimeMs": 1771797965520.799,
+      "nodes": [
+        {
+          "id": "note:templates/project",
+          "title": "Project",
+          "type": "note",
+          "category": "note",
+          "path": "templates/project.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:05.520Z"
+        }
+      ],
+      "edges": []
+    },
+    "templates/task.md": {
+      "relativePath": "templates/task.md",
+      "mtimeMs": 1771797965520.799,
+      "nodes": [
+        {
+          "id": "note:templates/task",
+          "title": "Task",
+          "type": "note",
+          "category": "note",
+          "path": "templates/task.md",
+          "tags": [],
+          "missing": false,
+          "degree": 0,
+          "modifiedAt": "2026-02-22T22:06:05.520Z"
+        }
+      ],
+      "edges": []
+    }
+  },
+  "graph": {
+    "schemaVersion": 1,
+    "nodes": [
+      {
+        "id": "note:decisions/3-tier-model-architecture",
+        "title": "3-tier model architecture",
+        "type": "decision",
+        "category": "decision",
+        "path": "decisions/3-tier-model-architecture.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:31.354Z"
+      },
+      {
+        "id": "note:decisions/meld-value-prop-direction",
+        "title": "MELD value prop direction",
+        "type": "decision",
+        "category": "decision",
+        "path": "decisions/meld-value-prop-direction.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:33.636Z"
+      },
+      {
+        "id": "note:decisions/provider-name-gemini-not-google",
+        "title": "Provider name gemini not google",
+        "type": "decision",
+        "category": "decision",
+        "path": "decisions/provider-name-gemini-not-google.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:32.463Z"
+      },
+      {
+        "id": "note:decisions/sqlite-over-postgresql-for-meld",
+        "title": "SQLite over PostgreSQL for MELD",
+        "type": "decision",
+        "category": "decision",
+        "path": "decisions/sqlite-over-postgresql-for-meld.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:29.845Z"
+      },
+      {
+        "id": "note:inbox/welcome",
+        "title": "Welcome to agent-brain",
+        "type": "note",
+        "category": "note",
+        "path": "inbox/welcome.md",
+        "tags": [
+          "getting-started",
+          "welcome"
+        ],
+        "missing": false,
+        "degree": 3,
+        "modifiedAt": "2026-02-22T22:06:05.521Z"
+      },
+      {
+        "id": "note:lessons/built-not-equals-tested-not-equals-working",
+        "title": "Built not equals tested not equals working",
+        "type": "lesson",
+        "category": "lesson",
+        "path": "lessons/built-not-equals-tested-not-equals-working.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:51.580Z"
+      },
+      {
+        "id": "note:lessons/theatre-accumulates-fast",
+        "title": "Theatre accumulates fast",
+        "type": "lesson",
+        "category": "lesson",
+        "path": "lessons/theatre-accumulates-fast.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:53.940Z"
+      },
+      {
+        "id": "note:lessons/validate-before-building",
+        "title": "Validate before building",
+        "type": "lesson",
+        "category": "lesson",
+        "path": "lessons/validate-before-building.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:52.776Z"
+      },
+      {
+        "id": "note:people/ab",
+        "title": "AB",
+        "type": "person",
+        "category": "person",
+        "path": "people/ab.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:55.108Z"
+      },
+      {
+        "id": "note:projects/meld",
+        "title": "MELD",
+        "type": "project",
+        "category": "project",
+        "path": "projects/meld.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:56.348Z"
+      },
+      {
+        "id": "note:README",
+        "title": "README",
+        "type": "note",
+        "category": "note",
+        "path": "README.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:05.521Z"
+      },
+      {
+        "id": "note:templates/checkpoint",
+        "title": "Checkpoint",
+        "type": "note",
+        "category": "note",
+        "path": "templates/checkpoint.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:05.519Z"
+      },
+      {
+        "id": "note:templates/daily-note",
+        "title": "Daily Note",
+        "type": "note",
+        "category": "note",
+        "path": "templates/daily-note.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:05.519Z"
+      },
+      {
+        "id": "note:templates/decision",
+        "title": "Decision",
+        "type": "note",
+        "category": "note",
+        "path": "templates/decision.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:05.519Z"
+      },
+      {
+        "id": "note:templates/handoff",
+        "title": "Handoff",
+        "type": "note",
+        "category": "note",
+        "path": "templates/handoff.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:05.519Z"
+      },
+      {
+        "id": "note:templates/lesson",
+        "title": "Lesson",
+        "type": "note",
+        "category": "note",
+        "path": "templates/lesson.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:05.519Z"
+      },
+      {
+        "id": "note:templates/person",
+        "title": "Person",
+        "type": "note",
+        "category": "note",
+        "path": "templates/person.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:05.520Z"
+      },
+      {
+        "id": "note:templates/project",
+        "title": "Project",
+        "type": "note",
+        "category": "note",
+        "path": "templates/project.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:05.520Z"
+      },
+      {
+        "id": "note:templates/task",
+        "title": "Task",
+        "type": "note",
+        "category": "note",
+        "path": "templates/task.md",
+        "tags": [],
+        "missing": false,
+        "degree": 0,
+        "modifiedAt": "2026-02-22T22:06:05.520Z"
+      },
+      {
+        "id": "tag:getting-started",
+        "title": "#getting-started",
+        "type": "tag",
+        "category": "tag",
+        "path": null,
+        "tags": [],
+        "missing": false,
+        "degree": 1,
+        "modifiedAt": null
+      },
+      {
+        "id": "tag:welcome",
+        "title": "#welcome",
+        "type": "tag",
+        "category": "tag",
+        "path": null,
+        "tags": [],
+        "missing": false,
+        "degree": 1,
+        "modifiedAt": null
+      },
+      {
+        "id": "unresolved:double-brackets",
+        "title": "Double Brackets",
+        "type": "unresolved",
+        "category": "unresolved",
+        "path": null,
+        "tags": [],
+        "missing": true,
+        "degree": 1,
+        "modifiedAt": null
+      }
+    ],
+    "edges": [
+      {
+        "id": "tag:note:inbox/welcome->tag:getting-started",
+        "source": "note:inbox/welcome",
+        "target": "tag:getting-started",
+        "type": "tag"
+      },
+      {
+        "id": "tag:note:inbox/welcome->tag:welcome",
+        "source": "note:inbox/welcome",
+        "target": "tag:welcome",
+        "type": "tag"
+      },
+      {
+        "id": "wiki_link:note:inbox/welcome->unresolved:double-brackets",
+        "source": "note:inbox/welcome",
+        "target": "unresolved:double-brackets",
+        "type": "wiki_link"
+      }
+    ],
+    "stats": {
+      "generatedAt": "2026-02-22T22:07:49.935Z",
+      "nodeCount": 22,
+      "edgeCount": 3,
+      "nodeTypeCounts": {
+        "decision": 4,
+        "note": 10,
+        "tag": 2,
+        "unresolved": 1,
+        "lesson": 3,
+        "person": 1,
+        "project": 1
+      },
+      "edgeTypeCounts": {
+        "tag": 2,
+        "wiki_link": 1
+      }
+    }
+  }
+}
